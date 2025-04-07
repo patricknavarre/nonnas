@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+  <!-- Outer circle -->
+  <circle cx="300" cy="300" r="290" fill="transparent" stroke="white" stroke-width="5"/>
+  
+  <!-- Inner circle -->
+  <circle cx="300" cy="300" r="200" fill="black"/>
+  
+  <!-- NR Logo in center -->
+  <g fill="white" transform="translate(300, 300)">
+    <!-- N -->
+    <path d="M-80,-50 L-80,50 L-40,50 L0,-20 L0,50 L40,50 L40,-50 L0,-50 L-40,20 L-40,-50 Z"/>
+    <!-- R -->
+    <path d="M50,-50 L50,50 L90,50 L90,10 L100,10 C120,10 140,-10 140,-30 V-30 C140,-40 120,-50 100,-50 Z M90,-20 L100,-20 V-10 L90,-10 Z"/>
+  </g>
+  
+  <!-- Text around circle -->
+  <!-- Top text: NONNA & RUE'S -->
+  <path id="top-curve" d="M300,80 A220,220 0 0 1 520,300" fill="none" stroke="none"/>
+  <text fill="white" font-family="Arial, sans-serif" font-size="44" font-weight="bold" letter-spacing="5">
+    <textPath href="#top-curve" startOffset="50%" text-anchor="middle">NONNA &amp; RUE'S</textPath>
+  </text>
+  
+  <!-- Bottom text: UNIQUE FINDS -->
+  <path id="bottom-curve" d="M300,520 A220,220 0 0 1 80,300" fill="none" stroke="none"/>
+  <text fill="white" font-family="Arial, sans-serif" font-size="44" font-weight="bold" letter-spacing="5">
+    <textPath href="#bottom-curve" startOffset="50%" text-anchor="middle">UNIQUE FINDS</textPath>
+  </text>
+  
+  <!-- Dots between text -->
+  <circle cx="80" cy="300" r="10" fill="white"/>
+  <circle cx="520" cy="300" r="10" fill="white"/>
+</svg> 
