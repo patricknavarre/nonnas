@@ -31,7 +31,19 @@ async function connectDB() {
       bufferCommands: false,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => mongoose);
+    // Check MongoDB URI format (without revealing full credentials)
+    const maskedURI = MONGODB_URI ? MONGODB_URI.replace(/:([^@]+)@/, ':***@') : 'undefined';
+    console.log(`Attempting MongoDB connection with URI: ${maskedURI}`);
+
+    cached.promise = mongoose.connect(MONGODB_URI, opts)
+      .then((mongoose) => {
+        console.log('MongoDB connection successful');
+        return mongoose;
+      })
+      .catch((err) => {
+        console.error('MongoDB connection error:', err.message);
+        throw err;
+      });
   }
 
   try {
