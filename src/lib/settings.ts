@@ -15,9 +15,8 @@ export interface Setting {
 // Cache the settings fetch to avoid repeated requests
 export const getSettings = cache(async (): Promise<Setting[]> => {
   try {
-    // Use absolute URL to ensure it works in all contexts
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3001';
-    const response = await fetch(`${baseUrl}/api/settings`, { 
+    // Use relative URL path to ensure it works in all contexts
+    const response = await fetch(`/api/settings`, { 
       next: { revalidate: 60 } // Revalidate every 60 seconds
     });
     
