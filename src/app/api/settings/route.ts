@@ -1,8 +1,14 @@
 import { NextResponse } from 'next/server';
-import { Setting, defaultSettings } from '@/models/Setting';
-import connectDB from '@/lib/mongodb';
+import { defaultSettings } from '@/models/Setting';
 import { cookies } from 'next/headers';
 import * as jwt from 'jsonwebtoken';
+
+// Mock settings data (using the default settings)
+const mockSettings = [...defaultSettings].map((setting, index) => ({
+  ...setting,
+  _id: `setting_${index + 1}`,
+  updatedAt: new Date().toISOString()
+}));
 
 // Helper function to check admin authentication
 async function isAdmin(request: Request) {
@@ -23,36 +29,11 @@ async function isAdmin(request: Request) {
   }
 }
 
-// Initialize default settings if they don't exist
-async function initializeSettings() {
-  try {
-    await connectDB();
-    
-    // Check if settings exist
-    const count = await Setting.countDocuments();
-    
-    if (count === 0) {
-      console.log('Initializing default settings...');
-      await Setting.insertMany(defaultSettings);
-      console.log('Default settings initialized');
-    }
-  } catch (error) {
-    console.error('Error initializing settings:', error);
-  }
-}
-
 // GET all settings
 export async function GET() {
   try {
-    await connectDB();
-    
-    // Initialize default settings if needed
-    await initializeSettings();
-    
-    // Get all settings
-    const settings = await Setting.find({}).sort({ group: 1, label: 1 });
-    
-    return NextResponse.json(settings);
+    // Return the mock settings
+    return NextResponse.json(mockSettings);
   } catch (error) {
     console.error('Error fetching settings:', error);
     return NextResponse.json(
@@ -74,7 +55,6 @@ export async function POST(request: Request) {
       );
     }
     
-    await connectDB();
     const body = await request.json();
     
     // Validate the request body
@@ -90,25 +70,28 @@ export async function POST(request: Request) {
     // Handle both single setting update and bulk update
     if (Array.isArray(body)) {
       // Bulk update
-      const updateOperations = body.map(setting => ({
-        updateOne: {
-          filter: { key: setting.key },
-          update: { $set: { value: setting.value } },
-          upsert: false
+      body.forEach(update => {
+        const settingIndex = mockSettings.findIndex(s => s.key === update.key);
+        if (settingIndex >= 0) {
+          mockSettings[settingIndex].value = update.value;
+          mockSettings[settingIndex].updatedAt = new Date().toISOString();
         }
-      }));
-      
-      const result = await Setting.bulkWrite(updateOperations);
-      updatedSettings = await Setting.find({ 
-        key: { $in: body.map(s => s.key) } 
       });
+      
+      updatedSettings = mockSettings.filter(setting => 
+        body.some(update => update.key === setting.key)
+      );
     } else {
       // Single setting update
-      updatedSettings = await Setting.findOneAndUpdate(
-        { key: body.key },
-        { $set: { value: body.value } },
-        { new: true }
-      );
+      const settingIndex = mockSettings.findIndex(s => s.key === body.key);
+      
+      if (settingIndex >= 0) {
+        mockSettings[settingIndex].value = body.value;
+        mockSettings[settingIndex].updatedAt = new Date().toISOString();
+        updatedSettings = mockSettings[settingIndex];
+      } else {
+        updatedSettings = null;
+      }
     }
     
     return NextResponse.json(updatedSettings);

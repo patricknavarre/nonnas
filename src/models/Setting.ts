@@ -87,10 +87,59 @@ export const defaultSettings: ISetting[] = [
     type: 'text'
   },
   {
-    key: 'about_text',
-    value: 'Nonna & Rue\'s is a boutique home goods store specializing in unique vintage finds and handcrafted items with southern charm. Our carefully curated collection brings character and warmth to your home.',
+    key: 'about_header',
+    value: 'Our Story',
     group: 'about',
-    label: 'About Us Text',
+    label: 'About Page Header',
+    type: 'text'
+  },
+  {
+    key: 'about_subheader',
+    value: 'A mother-daughter journey of passion, creativity, and Southern hospitality',
+    group: 'about',
+    label: 'About Page Subheader',
+    type: 'text'
+  },
+  {
+    key: 'about_section_header',
+    value: 'The Heart Behind Nonna & Rue\'s',
+    group: 'about',
+    label: 'About Section Header',
+    type: 'text'
+  },
+  {
+    key: 'about_text',
+    value: 'Nonna & Rue\'s began as a dream shared between a mother and daughter in the heart of Shreveport, Louisiana. Rhonda "Nonna" and her daughter Lauren "Rue" always shared a special bond through their love of unique, handcrafted treasures.',
+    group: 'about',
+    label: 'About Us First Paragraph',
+    type: 'textarea'
+  },
+  {
+    key: 'about_text_2',
+    value: 'What started as weekend adventures hunting for one-of-a-kind pieces at local markets and estate sales soon blossomed into something more. In early 2024, they took a leap of faith and opened their shop in The Grove, a charming district in Shreveport\'s historic downtown.',
+    group: 'about',
+    label: 'About Us Second Paragraph',
+    type: 'textarea'
+  },
+  {
+    key: 'about_text_3',
+    value: '"We wanted to create a space that felt like an extension of our home," Lauren recalls. "A place where people could find gifts that tell stories and bring joy, regardless of their age."',
+    group: 'about',
+    label: 'About Us Third Paragraph',
+    type: 'textarea'
+  },
+  {
+    key: 'about_text_4',
+    value: 'Rhonda, affectionately known as "Nonna" to her grandchildren and now to their loyal customers, brings decades of Southern hospitality and an eye for timeless elegance to their collection. Lauren, or "Rue" as she\'s been called since childhood, contributes a contemporary perspective that keeps their offerings fresh and exciting.',
+    group: 'about',
+    label: 'About Us Fourth Paragraph',
+    type: 'textarea'
+  },
+  {
+    key: 'about_text_5',
+    value: 'Together, they\'ve curated a boutique that seamlessly blends vintage charm with modern sensibilities, offering everything from handcrafted home décor to artisanal kitchenware, unique jewelry, and whimsical gifts that bring smiles to faces young and old.',
+    group: 'about',
+    label: 'About Us Fifth Paragraph',
     type: 'textarea'
   },
   {

@@ -1,16 +1,27 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { getSetting } from '@/lib/settings';
 
-export default function About() {
+export default async function About() {
+  // Get about page settings from the database
+  const aboutHeader = await getSetting<string>('about_header', 'Our Story');
+  const aboutSubheader = await getSetting<string>('about_subheader', 'A mother-daughter journey of passion, creativity, and Southern hospitality');
+  const sectionHeader = await getSetting<string>('about_section_header', 'The Heart Behind Nonna & Rue\'s');
+  const aboutText1 = await getSetting<string>('about_text', 'Nonna & Rue\'s began as a dream shared between a mother and daughter in the heart of Shreveport, Louisiana. Rhonda "Nonna" and her daughter Lauren "Rue" always shared a special bond through their love of unique, handcrafted treasures.');
+  const aboutText2 = await getSetting<string>('about_text_2', 'What started as weekend adventures hunting for one-of-a-kind pieces at local markets and estate sales soon blossomed into something more. In early 2024, they took a leap of faith and opened their shop in The Grove, a charming district in Shreveport\'s historic downtown.');
+  const aboutText3 = await getSetting<string>('about_text_3', '"We wanted to create a space that felt like an extension of our home," Lauren recalls. "A place where people could find gifts that tell stories and bring joy, regardless of their age."');
+  const aboutText4 = await getSetting<string>('about_text_4', 'Rhonda, affectionately known as "Nonna" to her grandchildren and now to their loyal customers, brings decades of Southern hospitality and an eye for timeless elegance to their collection. Lauren, or "Rue" as she\'s been called since childhood, contributes a contemporary perspective that keeps their offerings fresh and exciting.');
+  const aboutText5 = await getSetting<string>('about_text_5', 'Together, they\'ve curated a boutique that seamlessly blends vintage charm with modern sensibilities, offering everything from handcrafted home décor to artisanal kitchenware, unique jewelry, and whimsical gifts that bring smiles to faces young and old.');
+
   return (
     <div className="pt-24 pb-16 bg-southern-cream">
       {/* Hero Section */}
       <section className="py-16 bg-southern-brown text-southern-cream">
         <div className="southern-container">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-6">Our Story</h1>
+            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-6">{aboutHeader}</h1>
             <p className="text-xl md:text-2xl font-body">
-              A mother-daughter journey of passion, creativity, and Southern hospitality
+              {aboutSubheader}
             </p>
           </div>
         </div>
@@ -31,22 +42,22 @@ export default function About() {
               />
             </div>
             <div>
-              <h2 className="text-3xl font-heading font-semibold text-southern-brown mb-6">The Heart Behind Nonna & Rue's</h2>
+              <h2 className="text-3xl font-heading font-semibold text-southern-brown mb-6">{sectionHeader}</h2>
               <div className="prose prose-lg text-gray-700 max-w-none">
                 <p className="mb-4">
-                  Nonna & Rue's began as a dream shared between a mother and daughter in the heart of Shreveport, Louisiana. Rhonda "Nonna" and her daughter Lauren "Rue" always shared a special bond through their love of unique, handcrafted treasures.
+                  {aboutText1}
                 </p>
                 <p className="mb-4">
-                  What started as weekend adventures hunting for one-of-a-kind pieces at local markets and estate sales soon blossomed into something more. In early 2024, they took a leap of faith and opened their shop in The Grove, a charming district in Shreveport's historic downtown.
+                  {aboutText2}
                 </p>
                 <p className="mb-4">
-                  "We wanted to create a space that felt like an extension of our home," Lauren recalls. "A place where people could find gifts that tell stories and bring joy, regardless of their age."
+                  {aboutText3}
                 </p>
                 <p className="mb-4">
-                  Rhonda, affectionately known as "Nonna" to her grandchildren and now to their loyal customers, brings decades of Southern hospitality and an eye for timeless elegance to their collection. Lauren, or "Rue" as she's been called since childhood, contributes a contemporary perspective that keeps their offerings fresh and exciting.
+                  {aboutText4}
                 </p>
                 <p>
-                  Together, they've curated a boutique that seamlessly blends vintage charm with modern sensibilities, offering everything from handcrafted home décor to artisanal kitchenware, unique jewelry, and whimsical gifts that bring smiles to faces young and old.
+                  {aboutText5}
                 </p>
               </div>
             </div>

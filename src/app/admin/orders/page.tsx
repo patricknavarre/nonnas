@@ -69,17 +69,17 @@ export default function OrdersAdminPage() {
 
   // Function to determine badge class based on order status
   function getStatusBadgeClass(status: string) {
-    switch (status) {
+    switch (status.toLowerCase()) {
       case 'pending':
-        return 'bg-yellow-100 text-yellow-800';
+        return 'bg-amber-200 text-amber-800';
       case 'processing':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-sky-200 text-sky-800';
       case 'shipped':
-        return 'bg-purple-100 text-purple-800';
+        return 'bg-violet-200 text-violet-800';
       case 'delivered':
-        return 'bg-green-100 text-green-800';
+        return 'bg-emerald-200 text-emerald-800';
       case 'cancelled':
-        return 'bg-red-100 text-red-800';
+        return 'bg-rose-200 text-rose-800';
       default:
         return 'bg-gray-100 text-gray-800';
     }

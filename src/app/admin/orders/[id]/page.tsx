@@ -19,7 +19,7 @@ interface Order {
     email: string;
     phone?: string;
   };
-  shippingAddress?: {
+  shippingAddress: {
     street: string;
     city: string;
     state: string;
@@ -27,8 +27,9 @@ interface Order {
     country: string;
   };
   items: OrderItem[];
-  total: number;
+  totalAmount: number;
   status: string;
+  paymentMethod: string;
   createdAt: string;
   updatedAt: string;
   notes?: string;
@@ -127,22 +128,23 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
     }
   };
 
-  const getStatusBadgeClass = (status: string) => {
+  // Function to determine badge class based on order status
+  function getStatusBadgeClass(status: string) {
     switch (status.toLowerCase()) {
       case 'pending':
-        return 'bg-yellow-100 text-yellow-800';
+        return 'bg-amber-200 text-amber-800';
       case 'processing':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-sky-200 text-sky-800';
       case 'shipped':
-        return 'bg-green-100 text-green-800';
+        return 'bg-violet-200 text-violet-800';
       case 'delivered':
-        return 'bg-green-500 text-white';
+        return 'bg-emerald-200 text-emerald-800';
       case 'cancelled':
-        return 'bg-red-100 text-red-800';
+        return 'bg-rose-200 text-rose-800';
       default:
         return 'bg-gray-100 text-gray-800';
     }
-  };
+  }
 
   if (loading) {
     return (
@@ -286,7 +288,7 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
                 <tr className="bg-gray-50">
                   <td colSpan={3} className="px-6 py-4 text-right text-sm font-medium text-gray-500">Total</td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium text-southern-brown">
-                    ${order.total.toFixed(2)}
+                    ${order.totalAmount.toFixed(2)}
                   </td>
                 </tr>
               </tbody>

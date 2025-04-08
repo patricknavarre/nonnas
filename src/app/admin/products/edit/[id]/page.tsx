@@ -6,41 +6,17 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 interface Product {
-  id: string;
-  name: string;
-  price: number;
+  _id: string;
+  title: string;
   description: string;
-  image: string;
+  price: number;
+  images: Array<{
+    url: string;
+    alt: string;
+  }>;
   category: string;
+  isActive: boolean;
 }
-
-// Sample products data (in a real app, this would come from a database)
-const productsData: Product[] = [
-  {
-    id: "1",
-    name: "Vintage Table Lamp",
-    price: 89.99,
-    description: "A beautiful vintage-inspired table lamp with brass accents and a linen shade.",
-    image: "/images/products/lamp.jpg",
-    category: "Lighting"
-  },
-  {
-    id: "2",
-    name: "Handcrafted Ceramic Vase",
-    price: 45.00,
-    description: "Unique handcrafted ceramic vase with an organic shape and earthy tones.",
-    image: "/images/products/vase.jpg",
-    category: "Home Decor"
-  },
-  {
-    id: "3",
-    name: "Woven Cotton Throw Pillow",
-    price: 34.99,
-    description: "Soft cotton throw pillow with handwoven texture and natural dyes.",
-    image: "/images/products/pillow.jpg",
-    category: "Textiles"
-  },
-];
 
 export default function EditProductPage({ params }: { params: { id: string } }) {
   const { id } = params;
@@ -48,11 +24,12 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
   const router = useRouter();
   
   const [formData, setFormData] = useState({
-    name: "",
+    title: "",
     price: "",
     description: "",
     category: "",
-    image: ""
+    imageUrl: "",
+    imageAlt: ""
   });
   const [loading, setLoading] = useState(true);
   const [saveLoading, setSaveLoading] = useState(false);
@@ -67,30 +44,39 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
     // Load product data
     const loadProduct = async () => {
       try {
-        // In a real app, fetch from API
-        // For now, use our sample data
-        const product = productsData.find(p => p.id === id);
+        setLoading(true);
+        const response = await fetch(`/api/products/${id}`);
         
-        if (!product) {
-          setError("Product not found");
+        if (!response.ok) {
+          if (response.status === 404) {
+            setError("Product not found");
+          } else {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+          }
           return;
         }
+        
+        const product = await response.json();
 
         setFormData({
-          name: product.name,
+          title: product.title,
           price: product.price.toString(),
           description: product.description,
           category: product.category,
-          image: product.image
+          imageUrl: product.images?.[0]?.url || "",
+          imageAlt: product.images?.[0]?.alt || ""
         });
       } catch (err) {
+        console.error("Failed to load product:", err);
         setError("Failed to load product");
       } finally {
         setLoading(false);
       }
     };
 
-    loadProduct();
+    if (status === "authenticated") {
+      loadProduct();
+    }
   }, [id, status, router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -108,15 +94,38 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
 
     try {
       // Validate form
-      if (!formData.name || !formData.price || !formData.description || !formData.category) {
+      if (!formData.title || !formData.price || !formData.description || !formData.category) {
         throw new Error("Please fill all required fields");
       }
 
-      // Here you would normally submit to an API
-      // For now, we'll just simulate a successful submission
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Prepare product data for API
+      const productData = {
+        title: formData.title,
+        price: parseFloat(formData.price),
+        description: formData.description,
+        category: formData.category,
+        images: [
+          {
+            url: formData.imageUrl || "/images/placeholder.png",
+            alt: formData.imageAlt || formData.title
+          }
+        ]
+      };
+
+      // Submit to API
+      const response = await fetch(`/api/products/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(productData),
+      });
       
-      console.log("Product updated:", { id, ...formData });
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}: ${await response.text()}`);
+      }
+      
+      // Navigate back to products list
       router.push("/admin/products");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to update product");
@@ -126,7 +135,11 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
   };
 
   if (status === "loading" || loading) {
-    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+    return (
+      <div className="min-h-screen bg-southern-cream pt-32 flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-southern-beige border-t-southern-brown rounded-full animate-spin"></div>
+      </div>
+    );
   }
 
   if (status === "unauthenticated") {
@@ -154,14 +167,14 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
       <div className="bg-white shadow-md rounded-lg p-6">
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
               Product Name *
             </label>
             <input
               type="text"
-              id="name"
-              name="name"
-              value={formData.name}
+              id="title"
+              name="title"
+              value={formData.title}
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-southern-green focus:border-southern-green"
               required
@@ -198,10 +211,12 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
               required
             >
               <option value="">Select a category</option>
-              <option value="Home Decor">Home Decor</option>
+              <option value="Home Décor">Home Décor</option>
               <option value="Furniture">Furniture</option>
               <option value="Lighting">Lighting</option>
-              <option value="Kitchen">Kitchen</option>
+              <option value="Table & Kitchen">Table & Kitchen</option>
+              <option value="Garden & Porch">Garden & Porch</option>
+              <option value="Gifts">Gifts</option>
               <option value="Art">Art</option>
               <option value="Textiles">Textiles</option>
             </select>
@@ -222,15 +237,15 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
             />
           </div>
 
-          <div className="mb-6">
-            <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-1">
+          <div className="mb-4">
+            <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-700 mb-1">
               Image URL *
             </label>
             <input
               type="text"
-              id="image"
-              name="image"
-              value={formData.image}
+              id="imageUrl"
+              name="imageUrl"
+              value={formData.imageUrl}
               onChange={handleChange}
               placeholder="/images/products/your-image.jpg"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-southern-green focus:border-southern-green"
@@ -239,6 +254,22 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
             <p className="mt-1 text-sm text-gray-500">
               Enter the path to your product image
             </p>
+          </div>
+
+          <div className="mb-6">
+            <label htmlFor="imageAlt" className="block text-sm font-medium text-gray-700 mb-1">
+              Image Alt Text *
+            </label>
+            <input
+              type="text"
+              id="imageAlt"
+              name="imageAlt"
+              value={formData.imageAlt}
+              onChange={handleChange}
+              placeholder="Description of the image"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-southern-green focus:border-southern-green"
+              required
+            />
           </div>
 
           <div className="flex justify-end">
@@ -250,8 +281,8 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
             </Link>
             <button
               type="submit"
+              className="bg-southern-green hover:bg-southern-green/90 text-white font-medium py-2 px-4 rounded"
               disabled={saveLoading}
-              className="bg-southern-green hover:bg-southern-green/90 text-white font-medium py-2 px-4 rounded disabled:opacity-50"
             >
               {saveLoading ? "Saving..." : "Save Changes"}
             </button>

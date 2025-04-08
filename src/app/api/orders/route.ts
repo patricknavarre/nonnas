@@ -17,7 +17,7 @@ const sampleOrders = [
         quantity: 1
       }
     ],
-    total: 89.99,
+    totalAmount: 89.99,
     status: 'Processing',
     createdAt: '2023-11-10T14:30:00Z',
     updatedAt: '2023-11-10T14:30:00Z',
@@ -49,7 +49,7 @@ const sampleOrders = [
         quantity: 2
       }
     ],
-    total: 215.50,
+    totalAmount: 215.50,
     status: 'Shipped',
     createdAt: '2023-11-08T10:15:00Z',
     updatedAt: '2023-11-09T09:30:00Z',
@@ -75,7 +75,7 @@ const sampleOrders = [
         quantity: 1
       }
     ],
-    total: 189.00,
+    totalAmount: 189.00,
     status: 'Delivered',
     createdAt: '2023-11-01T16:45:00Z',
     updatedAt: '2023-11-05T11:20:00Z',
@@ -107,7 +107,7 @@ const sampleOrders = [
         quantity: 3
       }
     ],
-    total: 172.49,
+    totalAmount: 172.49,
     status: 'Pending',
     createdAt: '2023-11-12T09:00:00Z',
     updatedAt: '2023-11-12T09:00:00Z',
@@ -133,7 +133,7 @@ const sampleOrders = [
         quantity: 1
       }
     ],
-    total: 245.00,
+    totalAmount: 245.00,
     status: 'Cancelled',
     createdAt: '2023-11-05T13:20:00Z',
     updatedAt: '2023-11-06T10:15:00Z',

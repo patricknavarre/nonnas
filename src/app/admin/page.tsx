@@ -39,11 +39,25 @@ export default function AdminDashboard() {
           }));
         }
         
-        // Fetch pending orders count (using hardcoded demo data for now)
-        setStats(prev => ({
-          ...prev,
-          pendingOrders: 2
-        }));
+        // Fetch orders and count pending/processing orders
+        const ordersResponse = await fetch('/api/orders');
+        if (ordersResponse.ok) {
+          const orders = await ordersResponse.json();
+          const pendingOrdersCount = orders.filter(
+            (order: any) => order.status === 'Pending' || order.status === 'Processing'
+          ).length;
+          
+          // Calculate total sales from all completed orders
+          const totalSalesAmount = orders
+            .filter((order: any) => order.status === 'Delivered' || order.status === 'Shipped')
+            .reduce((total: number, order: any) => total + order.totalAmount, 0);
+          
+          setStats(prev => ({
+            ...prev,
+            pendingOrders: pendingOrdersCount,
+            totalSales: totalSalesAmount
+          }));
+        }
         
       } catch (error) {
         console.error('Error fetching stats:', error);

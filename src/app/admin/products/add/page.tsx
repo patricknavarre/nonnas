@@ -191,10 +191,12 @@ export default function AddProductPage() {
               required
             >
               <option value="">Select a category</option>
-              <option value="Home Decor">Home Decor</option>
+              <option value="Home Décor">Home Décor</option>
               <option value="Furniture">Furniture</option>
               <option value="Lighting">Lighting</option>
-              <option value="Kitchen">Kitchen</option>
+              <option value="Table & Kitchen">Table & Kitchen</option>
+              <option value="Garden & Porch">Garden & Porch</option>
+              <option value="Gifts">Gifts</option>
               <option value="Art">Art</option>
               <option value="Textiles">Textiles</option>
             </select>
