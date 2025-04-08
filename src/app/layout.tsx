@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Lora } from "next/font/google";
 import "./globals.css";
-import { getServerSession } from "next-auth";
 import SessionProvider from "@/components/SessionProvider";
 import { CartProvider } from "@/components/CartContext";
 import CartIcon from "@/components/CartIcon";
@@ -63,17 +62,13 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getServerSession();
-
   return (
     <html lang="en">
       <body className={`${playfair.variable} ${lora.variable} bg-southern-cream`}>
-        <SessionProvider session={session}>
-          <CartProvider>
-            <Navigation />
-            {children}
-          </CartProvider>
-        </SessionProvider>
+        <CartProvider>
+          <Navigation />
+          {children}
+        </CartProvider>
       </body>
     </html>
   );
