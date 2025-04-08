@@ -1,15 +1,48 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { getSetting, getSettingsByGroup } from '@/lib/settings';
+import RefreshHandler from '@/components/RefreshHandler';
+
+// Allow some caching to prevent constant re-renders
+export const dynamic = 'force-dynamic';
+export const revalidate = 60; // Revalidate every 60 seconds instead of every request
 
 export default async function Home() {
   // Get homepage settings from the database
   const heroHeading = await getSetting<string>('hero_heading', 'Discover Unique Treasures');
   const heroSubheading = await getSetting<string>('hero_subheading', 'Curated vintage & handcrafted home goods with southern charm');
   const siteTitle = await getSetting<string>('site_title', "Nonna & Rue's");
+  const heroLogo = await getSetting<string>('hero_logo', '/images/NonnaAndRues.jpg');
+  
+  // Featured category settings
+  const featuredCategory1Title = await getSetting<string>('featured_category_1_title', 'Home Decor');
+  const featuredCategory1Image = await getSetting<string>('featured_category_1_image', '/images/categories/home-decor.jpg');
+  const featuredCategory1Link = await getSetting<string>('featured_category_1_link', '/category/home-decor');
+  
+  const featuredCategory2Title = await getSetting<string>('featured_category_2_title', 'Vintage');
+  const featuredCategory2Image = await getSetting<string>('featured_category_2_image', '/images/categories/vintage.jpg');
+  const featuredCategory2Link = await getSetting<string>('featured_category_2_link', '/category/vintage');
+  
+  const featuredCategory3Title = await getSetting<string>('featured_category_3_title', 'Seasonal');
+  const featuredCategory3Image = await getSetting<string>('featured_category_3_image', '/images/categories/seasonal.jpg');
+  const featuredCategory3Link = await getSetting<string>('featured_category_3_link', '/category/seasonal');
+  
+  // Featured products section settings
+  const featuredProductsHeading = await getSetting<string>('featured_products_heading', 'Our Featured Products');
+  const featuredProductsSubheading = await getSetting<string>('featured_products_subheading', 'Hand-selected treasures for your home');
+  
+  // Newsletter section settings
+  const newsletterHeading = await getSetting<string>('newsletter_heading', 'Join Our Community');
+  const newsletterSubheading = await getSetting<string>('newsletter_subheading', 'Subscribe for updates on new arrivals and special promotions');
+  
+  // We'll still use a timestamp for the refresh handler but not for each setting
+  const timestamp = Date.now();
   
   return (
     <div className="min-h-screen bg-southern-cream">
+      {/* Client component to handle automatic refresh - with reduced frequency */}
+      <RefreshHandler lastUpdate={timestamp} />
+      
       {/* Hero Section - Full Height with Parallax Effect */}
       <main>
         <div className="relative min-h-screen flex items-center justify-center pt-20">
@@ -22,7 +55,7 @@ export default async function Home() {
             <div className="mb-16 -mt-24">
               <div className="rounded-full overflow-hidden bg-white border-4 border-white shadow-lg inline-block p-2">
                 <Image 
-                  src="/images/NonnaAndRues.jpg" 
+                  src={heroLogo} 
                   alt={siteTitle}
                   width={300}
                   height={300}

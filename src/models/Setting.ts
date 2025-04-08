@@ -73,6 +73,13 @@ export const defaultSettings: ISetting[] = [
     type: 'text'
   },
   {
+    key: 'hero_logo',
+    value: '/images/nr-circle-logo.svg',
+    group: 'home',
+    label: 'Hero Logo Image',
+    type: 'image'
+  },
+  {
     key: 'contact_email',
     value: 'contact@nonnaandrues.com',
     group: 'contact',

@@ -125,13 +125,17 @@ export default function SettingsPage() {
         value: setting.value
       }));
       
+      console.log('Saving settings:', updateData);
+      
       // Send the update to the API
       const response = await fetch('/api/settings', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache'
         },
         body: JSON.stringify(updateData),
+        cache: 'no-store'
       });
       
       if (!response.ok) {
@@ -148,11 +152,96 @@ export default function SettingsPage() {
       });
       setDirtySettings(newDirtySettings);
       
+      // Force refresh settings on all pages
+      console.log('Refreshing settings cache...');
+      try {
+        // Call the refresh endpoint with timestamp to prevent caching
+        const timestamp = new Date().getTime();
+        const refreshResponse = await fetch(`/api/settings/refresh?t=${timestamp}`, {
+          method: 'POST',
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+          }
+        });
+        
+        if (!refreshResponse.ok) {
+          console.warn('Settings cache refresh API returned an error:', await refreshResponse.text());
+        } else {
+          console.log('Settings cache refresh API responded successfully');
+        }
+      } catch (refreshErr) {
+        console.error('Error refreshing settings cache:', refreshErr);
+      }
+      
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred while saving settings");
       console.error('Error saving settings:', err);
     } finally {
       setSaving(false);
+    }
+  };
+  
+  // Function to manually refresh settings cache
+  const handleRefreshCache = async () => {
+    try {
+      setSuccess("");
+      setError("");
+      
+      console.log("Manually refreshing settings cache...");
+      
+      // Add timestamp to prevent caching
+      const timestamp = new Date().getTime();
+      
+      // Call the refresh endpoint directly with POST method
+      const refreshResponse = await fetch(`/api/settings/refresh?t=${timestamp}`, {
+        method: 'POST',
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        }
+      });
+      
+      if (!refreshResponse.ok) {
+        const errorText = await refreshResponse.text();
+        console.error('Error in refresh response:', errorText);
+        throw new Error(`Refresh API error: ${refreshResponse.status}`);
+      }
+      
+      // Also perform a GET refresh for thoroughness
+      await fetch(`/api/settings/refresh?t=${timestamp}`, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        }
+      });
+      
+      setSuccess(
+        "Site refreshed successfully! If changes aren't visible, try hard-refreshing your browser (Ctrl+F5 or Cmd+Shift+R) or open the site in a new incognito window."
+      );
+      
+      // Force reload the settings to show the latest values
+      const settingsResponse = await fetch(`/api/settings?t=${timestamp}`, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache'
+        }
+      });
+      
+      if (settingsResponse.ok) {
+        const freshSettings = await settingsResponse.json();
+        setSettings(freshSettings);
+      }
+      
+    } catch (err) {
+      setError("Error refreshing pages. Please try restarting the server.");
+      console.error('Error refreshing cache:', err);
     }
   };
   
@@ -184,15 +273,26 @@ export default function SettingsPage() {
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
               <h1 className="text-3xl font-bold text-southern-brown">Site Settings</h1>
-              <Link 
-                href="/admin" 
-                className="inline-flex items-center text-southern-green hover:text-southern-green/80 mt-1"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
-                </svg>
-                Back to Dashboard
-              </Link>
+              <div className="flex items-center space-x-4 mt-1">
+                <Link 
+                  href="/admin" 
+                  className="inline-flex items-center text-southern-green hover:text-southern-green/80"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
+                  </svg>
+                  Back to Dashboard
+                </Link>
+                <Link 
+                  href="/admin/settings/init" 
+                  className="inline-flex items-center text-red-600 hover:text-red-700"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd" />
+                  </svg>
+                  Reset Settings
+                </Link>
+              </div>
             </div>
             <button
               onClick={handleSaveSettings}
@@ -200,6 +300,15 @@ export default function SettingsPage() {
               className="bg-southern-green hover:bg-southern-green/90 text-white font-medium py-2 px-4 rounded disabled:opacity-50"
             >
               {saving ? "Saving..." : "Save Changes"}
+            </button>
+            <button
+              onClick={handleRefreshCache}
+              className="ml-2 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded flex items-center"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd" />
+              </svg>
+              Force Site Refresh
             </button>
           </div>
         </header>

@@ -2,8 +2,16 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getSetting } from '@/lib/settings';
 
+// Force the page to be dynamically rendered on each request
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+export const fetchCache = 'force-no-store';
+
 export default async function About() {
-  // Get about page settings from the database
+  // Get current timestamp for display purposes only
+  const timestamp = Date.now();
+  
+  // Use settings library - force refresh only on first load, not on subsequent renders
   const aboutHeader = await getSetting<string>('about_header', 'Our Story');
   const aboutSubheader = await getSetting<string>('about_subheader', 'A mother-daughter journey of passion, creativity, and Southern hospitality');
   const sectionHeader = await getSetting<string>('about_section_header', 'The Heart Behind Nonna & Rue\'s');
@@ -19,7 +27,9 @@ export default async function About() {
       <section className="py-16 bg-southern-brown text-southern-cream">
         <div className="southern-container">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-6">{aboutHeader}</h1>
+            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-6">
+              {aboutHeader}
+            </h1>
             <p className="text-xl md:text-2xl font-body">
               {aboutSubheader}
             </p>
