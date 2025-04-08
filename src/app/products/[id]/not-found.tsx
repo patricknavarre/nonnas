@@ -8,14 +8,16 @@ export default function ProductNotFound() {
       <nav className="bg-white/80 backdrop-blur-sm border-b southern-border px-8 py-4 fixed w-full z-10">
         <div className="southern-container flex justify-between items-center">
           <Link href="/" className="flex items-center">
-            <Image 
-              src="/images/nonna-and-rues-logo.svg" 
-              alt="Nonna & Rue's" 
-              width={160} 
-              height={50} 
-              className="h-12 w-auto"
-              unoptimized
-            />
+            <div className="rounded-full overflow-hidden bg-white border border-gray-200 shadow-sm">
+              <Image 
+                src="/images/NonnaAndRues.jpg" 
+                alt="Nonna & Rue's" 
+                width={48} 
+                height={48} 
+                className="h-12 w-12"
+              />
+            </div>
+            <span className="ml-3 text-xl font-medium">Nonna & Rue's</span>
           </Link>
           <div className="space-x-6 font-body text-gray-600">
             <Link 

@@ -1,133 +1,140 @@
 "use client";
 
 import { useState, useEffect, FormEvent } from "react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-export default function AddProductPage() {
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+  image: string;
+  category: string;
+}
+
+// Sample products data (in a real app, this would come from a database)
+const productsData: Product[] = [
+  {
+    id: "1",
+    name: "Vintage Table Lamp",
+    price: 89.99,
+    description: "A beautiful vintage-inspired table lamp with brass accents and a linen shade.",
+    image: "/images/products/lamp.jpg",
+    category: "Lighting"
+  },
+  {
+    id: "2",
+    name: "Handcrafted Ceramic Vase",
+    price: 45.00,
+    description: "Unique handcrafted ceramic vase with an organic shape and earthy tones.",
+    image: "/images/products/vase.jpg",
+    category: "Home Decor"
+  },
+  {
+    id: "3",
+    name: "Woven Cotton Throw Pillow",
+    price: 34.99,
+    description: "Soft cotton throw pillow with handwoven texture and natural dyes.",
+    image: "/images/products/pillow.jpg",
+    category: "Textiles"
+  },
+];
+
+export default function EditProductPage({ params }: { params: { id: string } }) {
+  const { id } = params;
+  const { data: session, status } = useSession();
   const router = useRouter();
   
   const [formData, setFormData] = useState({
-    title: "",
+    name: "",
     price: "",
     description: "",
     category: "",
-    images: [{ url: "", alt: "" }]
+    image: ""
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [saveLoading, setSaveLoading] = useState(false);
   const [error, setError] = useState("");
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [authChecking, setAuthChecking] = useState(true);
 
   useEffect(() => {
-    // Check authentication first
-    const checkAuth = async () => {
+    if (status === "unauthenticated") {
+      router.push("/admin/login");
+      return;
+    }
+
+    // Load product data
+    const loadProduct = async () => {
       try {
-        setAuthChecking(true);
-        const response = await fetch('/api/auth/status');
-        const data = await response.json();
+        // In a real app, fetch from API
+        // For now, use our sample data
+        const product = productsData.find(p => p.id === id);
         
-        if (!data.authenticated) {
-          console.log('Not authenticated in add product page, redirecting to login');
-          router.push('/admin/login?from=/admin/products/add');
-          return false;
+        if (!product) {
+          setError("Product not found");
+          return;
         }
-        
-        setIsAuthenticated(true);
-        return true;
+
+        setFormData({
+          name: product.name,
+          price: product.price.toString(),
+          description: product.description,
+          category: product.category,
+          image: product.image
+        });
       } catch (err) {
-        console.error('Error checking auth status:', err);
-        setError('Failed to verify authentication');
-        return false;
+        setError("Failed to load product");
       } finally {
-        setAuthChecking(false);
+        setLoading(false);
       }
     };
 
-    checkAuth();
-  }, [router]);
+    loadProduct();
+  }, [id, status, router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    
-    if (name === "imageUrl") {
-      setFormData(prev => ({
-        ...prev,
-        images: [{ ...prev.images[0], url: value }]
-      }));
-    } else if (name === "imageAlt") {
-      setFormData(prev => ({
-        ...prev,
-        images: [{ ...prev.images[0], alt: value }]
-      }));
-    } else {
-      setFormData(prev => ({
-        ...prev,
-        [name]: value
-      }));
-    }
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    setSaveLoading(true);
     setError("");
 
     try {
       // Validate form
-      if (!formData.title || !formData.price || !formData.description || !formData.category) {
+      if (!formData.name || !formData.price || !formData.description || !formData.category) {
         throw new Error("Please fill all required fields");
       }
 
-      if (!formData.images[0].url) {
-        throw new Error("Please provide an image URL");
-      }
-
-      // Convert price to number
-      const productData = {
-        ...formData,
-        price: parseFloat(formData.price),
-        isActive: true
-      };
-
-      // Submit to the API
-      const response = await fetch('/api/products', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(productData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to add product");
-      }
+      // Here you would normally submit to an API
+      // For now, we'll just simulate a successful submission
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      const result = await response.json();
-      console.log("Product added:", result);
+      console.log("Product updated:", { id, ...formData });
       router.push("/admin/products");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to add product");
+      setError(err instanceof Error ? err.message : "Failed to update product");
     } finally {
-      setLoading(false);
+      setSaveLoading(false);
     }
   };
 
-  if (authChecking) {
-    return (
-      <div className="min-h-screen bg-southern-cream pt-32 flex items-center justify-center">
-        <div className="w-12 h-12 border-4 border-southern-beige border-t-southern-brown rounded-full animate-spin"></div>
-      </div>
-    );
+  if (status === "loading" || loading) {
+    return <div className="flex justify-center items-center h-screen">Loading...</div>;
   }
 
-  if (!isAuthenticated) {
-    return null; // Will redirect in useEffect
+  if (status === "unauthenticated") {
+    return null;
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6 pt-32">
+    <div className="max-w-4xl mx-auto p-6">
       <div className="mb-8">
         <Link 
           href="/admin/products"
@@ -135,7 +142,7 @@ export default function AddProductPage() {
         >
           ← Back to Products
         </Link>
-        <h1 className="text-3xl font-bold text-southern-brown mt-2">Add New Product</h1>
+        <h1 className="text-3xl font-bold text-southern-brown mt-2">Edit Product</h1>
       </div>
 
       {error && (
@@ -147,14 +154,14 @@ export default function AddProductPage() {
       <div className="bg-white shadow-md rounded-lg p-6">
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
               Product Name *
             </label>
             <input
               type="text"
-              id="title"
-              name="title"
-              value={formData.title}
+              id="name"
+              name="name"
+              value={formData.name}
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-southern-green focus:border-southern-green"
               required
@@ -215,38 +222,22 @@ export default function AddProductPage() {
             />
           </div>
 
-          <div className="mb-4">
-            <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-700 mb-1">
+          <div className="mb-6">
+            <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-1">
               Image URL *
             </label>
             <input
               type="text"
-              id="imageUrl"
-              name="imageUrl"
-              value={formData.images[0].url}
+              id="image"
+              name="image"
+              value={formData.image}
               onChange={handleChange}
               placeholder="/images/products/your-image.jpg"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-southern-green focus:border-southern-green"
               required
             />
-          </div>
-
-          <div className="mb-6">
-            <label htmlFor="imageAlt" className="block text-sm font-medium text-gray-700 mb-1">
-              Image Alt Text *
-            </label>
-            <input
-              type="text"
-              id="imageAlt"
-              name="imageAlt"
-              value={formData.images[0].alt}
-              onChange={handleChange}
-              placeholder="Brief description of the image"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-southern-green focus:border-southern-green"
-              required
-            />
             <p className="mt-1 text-sm text-gray-500">
-              Provide a short description of the image for accessibility
+              Enter the path to your product image
             </p>
           </div>
 
@@ -259,10 +250,10 @@ export default function AddProductPage() {
             </Link>
             <button
               type="submit"
-              disabled={loading}
+              disabled={saveLoading}
               className="bg-southern-green hover:bg-southern-green/90 text-white font-medium py-2 px-4 rounded disabled:opacity-50"
             >
-              {loading ? "Adding..." : "Add Product"}
+              {saveLoading ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </form>

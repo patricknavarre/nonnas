@@ -1,7 +1,13 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { getSetting, getSettingsByGroup } from '@/lib/settings';
 
 export default async function Home() {
+  // Get homepage settings from the database
+  const heroHeading = await getSetting<string>('hero_heading', 'Discover Unique Treasures');
+  const heroSubheading = await getSetting<string>('hero_subheading', 'Curated vintage & handcrafted home goods with southern charm');
+  const siteTitle = await getSetting<string>('site_title', "Nonna & Rue's");
+  
   return (
     <div className="min-h-screen bg-southern-cream">
       {/* Hero Section - Full Height with Parallax Effect */}
@@ -14,21 +20,25 @@ export default async function Home() {
           <div className="relative z-0 container mx-auto px-6 py-12 flex flex-col items-center">
             {/* Large logo */}
             <div className="mb-16 -mt-24">
-              <Image 
-                src="/images/NonnaAndRues.jpg" 
-                alt="Nonna and Rue's" 
-                width={350}
-                height={350}
-                className="object-contain rounded-full"
-                priority
-              />
+              <div className="rounded-full overflow-hidden bg-white border-4 border-white shadow-lg inline-block p-2">
+                <Image 
+                  src="/images/NonnaAndRues.jpg" 
+                  alt={siteTitle}
+                  width={300}
+                  height={300}
+                  className="rounded-full"
+                  priority
+                />
+              </div>
             </div>
             
             {/* Description */}
             <div className="max-w-2xl text-center mb-10 relative z-10">
+              <h1 className="text-3xl md:text-4xl text-southern-cream font-bold mb-4">
+                {heroHeading}
+              </h1>
               <p className="text-xl md:text-2xl text-southern-cream leading-relaxed">
-                Discover our carefully curated collection of home décor and lifestyle pieces 
-                that bring warmth and elegance to your Southern home.
+                {heroSubheading}
               </p>
             </div>
             

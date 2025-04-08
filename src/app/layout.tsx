@@ -6,6 +6,7 @@ import { CartProvider } from "@/components/CartContext";
 import CartIcon from "@/components/CartIcon";
 import Link from "next/link";
 import Image from "next/image";
+import { headers } from 'next/headers';
 
 const playfair = Playfair_Display({ 
   subsets: ["latin"],
@@ -28,14 +29,17 @@ function Navigation() {
     <nav className="bg-white/80 backdrop-blur-sm border-b southern-border px-8 py-4 fixed w-full z-50">
       <div className="southern-container flex justify-between items-center">
         <Link href="/" className="flex items-center">
-          <Image
-            src="/images/NonnaAndRues.jpg"
-            alt="Nonna & Rue's"
-            width={50}
-            height={50}
-            className="mr-3 rounded-full"
-          />
-          <h1 className="text-2xl font-bold text-southern-brown font-display">Nonna & Rue's</h1>
+          <div className="rounded-full overflow-hidden bg-white border border-gray-200 shadow-sm">
+            <Image
+              src="/images/NonnaAndRues.jpg"
+              alt="Nonna & Rue's"
+              width={60}
+              height={60}
+              className="h-12 w-12"
+              priority
+            />
+          </div>
+          <h1 className="text-2xl font-bold text-southern-brown font-display ml-3">Nonna & Rue's</h1>
         </Link>
         <div className="flex items-center space-x-6 font-body text-gray-600">
           <Link 
@@ -65,10 +69,12 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${playfair.variable} ${lora.variable} bg-southern-cream`}>
-        <CartProvider>
-          <Navigation />
-          {children}
-        </CartProvider>
+        <SessionProvider>
+          <CartProvider>
+            <Navigation />
+            {children}
+          </CartProvider>
+        </SessionProvider>
       </body>
     </html>
   );
