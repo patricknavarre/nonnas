@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Nonna & Rue's
+
+A boutique e-commerce website built with Next.js, MongoDB, and Tailwind CSS.
 
 ## Getting Started
 
-First, run the development server:
+First, clone the repository:
+
+```bash
+git clone https://github.com/patricknavarre/nonnas.git
+cd nonnas
+```
+
+Install the dependencies:
+
+```bash
+npm install
+```
+
+Create a `.env.local` file with required environment variables (see `.env.example` for reference).
+
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deployment on Vercel
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The easiest way to deploy this app is to use [Vercel](https://vercel.com):
 
-## Learn More
+1. Create a Vercel account if you don't have one
+2. Install the Vercel CLI: `npm i -g vercel`
+3. Run `vercel` in the root of your project
+4. Follow the prompts to link your GitHub repository
 
-To learn more about Next.js, take a look at the following resources:
+Alternatively, you can connect your GitHub repository directly through the Vercel dashboard for automatic deployments.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Required Environment Variables
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Make sure to add these environment variables to your Vercel project:
 
-## Deploy on Vercel
+- `MONGODB_URI`: Your MongoDB connection string
+- `NEXTAUTH_SECRET`: A secret key for NextAuth (run `openssl rand -base64 32` to generate one)
+- `ADMIN_USERNAME`: Initial admin username
+- `ADMIN_PASSWORD`: Initial admin password
+- `ADMIN_EMAIL`: Admin email address
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Features
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Responsive design
+- Admin dashboard for managing products and orders
+- Settings management system
+- User authentication
+- Product catalog
+- Shopping cart
+
+## Tech Stack
+
+- **Framework**: Next.js
+- **Database**: MongoDB (via mongoose)
+- **Authentication**: NextAuth.js
+- **CSS**: Tailwind CSS
+- **Deployment**: Vercel
+- **State Management**: React Context API
+
+## License
+
+MIT

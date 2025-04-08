@@ -26,6 +26,32 @@ let STATIC_SETTINGS_CACHE: Setting[] | null = null;
 let LAST_FETCH_TIME = 0;
 const FETCH_COOLDOWN_MS = 30000; // 30 seconds minimum between fetches
 
+// Helper function to get the base URL for API requests
+function getBaseUrl() {
+  // For Vercel deployment
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+  
+  // For preview deployments
+  if (process.env.NEXT_PUBLIC_VERCEL_URL) {
+    return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
+  }
+  
+  // For custom domain
+  if (process.env.NEXT_PUBLIC_SITE_URL) {
+    return process.env.NEXT_PUBLIC_SITE_URL;
+  }
+  
+  // For local development - checking if we're in a browser environment
+  if (typeof window !== 'undefined') {
+    return window.location.origin;
+  }
+  
+  // Default for local server-side rendering
+  return 'http://localhost:3000';
+}
+
 // VERY simple function to get settings without causing loops
 async function getSettingsFromAPI(): Promise<Setting[]> {
   const now = Date.now();
@@ -39,10 +65,11 @@ async function getSettingsFromAPI(): Promise<Setting[]> {
   LAST_FETCH_TIME = now;
   
   try {
-    // Use static URL to reduce complexity
-    const url = `http://localhost:3000/api/settings?t=${now}`;
+    // Get base URL for the current environment
+    const baseUrl = getBaseUrl();
+    const url = `${baseUrl}/api/settings?t=${now}`;
     
-    console.log(`[Settings] Fetching settings, last fetch was ${now - LAST_FETCH_TIME}ms ago`);
+    console.log(`[Settings] Fetching settings from: ${url}`);
     
     const response = await fetch(url, { 
       cache: 'no-store',
