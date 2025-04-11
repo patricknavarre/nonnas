@@ -120,42 +120,60 @@ export default function ProductsPage() {
 
   return (
     <div className="min-h-screen bg-southern-cream">
-      {/* Products Page Content */}
-      <main className="pt-32 pb-16">
-        <div className="southern-container">
-          <div className="text-center mb-12">
-            <h1 className="section-title">Our Collection</h1>
-            <p className="section-subtitle text-center mx-auto max-w-2xl">
-              Discover our carefully curated selection of Southern-inspired home décor and lifestyle pieces
-            </p>
-          </div>
+      {/* Hero Section */}
+      <section className="relative h-[60vh] flex items-center justify-center pt-32">
+        <div className="absolute inset-0 bg-southern-brown/70">
+          <Image
+            src="/images/Nonna_and_Rues_BG.jpg"
+            alt="Our Collection Background"
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
+        <div className="relative z-10 container mx-auto px-6 text-center">
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-8">
+            Our Collection
+          </h1>
+          <p className="text-xl md:text-2xl text-white/90 max-w-2xl mx-auto font-light">
+            Discover our carefully curated selection of Southern-inspired home décor and lifestyle pieces
+          </p>
+        </div>
+      </section>
 
-          {/* Search Box */}
-          <div className="max-w-md mx-auto mb-8 relative">
-            <div className="relative">
+      {/* Main Content */}
+      <main className="py-16">
+        <div className="container mx-auto px-6">
+          {/* Search and Filter Section */}
+          <div className="bg-white rounded-xl shadow-lg p-8 mb-12 -mt-16 relative z-20 max-w-4xl mx-auto">
+            {/* Search Box */}
+            <div className="relative mb-8">
               <input
                 type="text"
                 placeholder="Search products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-2 border border-southern-beige rounded-md focus:outline-none focus:ring-2 focus:ring-southern-accent"
+                className="w-full px-6 py-4 bg-gray-50 border-2 border-southern-brown/30 rounded-full focus:outline-none focus:ring-2 focus:ring-southern-accent text-lg"
               />
               {searchTerm && (
                 <button 
                   onClick={() => setSearchTerm('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                  className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
-                  ✕
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
                 </button>
               )}
             </div>
             
+            {/* Search Suggestions */}
             {suggestions.length > 0 && (
-              <div className="absolute z-10 w-full bg-white mt-1 border border-southern-beige rounded-md shadow-lg">
+              <div className="absolute z-30 w-full max-w-4xl left-1/2 -translate-x-1/2 bg-white mt-1 border border-gray-200 rounded-xl shadow-xl">
                 {suggestions.map((suggestion, index) => (
                   <div 
                     key={index}
-                    className="px-4 py-2 hover:bg-southern-cream cursor-pointer"
+                    className="px-6 py-3 hover:bg-gray-50 cursor-pointer transition-colors"
                     onClick={() => {
                       setSearchTerm(suggestion);
                       setSuggestions([]);
@@ -166,19 +184,23 @@ export default function ProductsPage() {
                 ))}
               </div>
             )}
-          </div>
 
-          {/* Product Category Filters */}
-          <div className="flex flex-wrap justify-center gap-4 mb-12">
-            {categories.map(category => (
-              <button 
-                key={category}
-                className={`btn btn-outline ${activeCategory === category ? 'bg-southern-brown text-white' : category === 'All Products' ? 'bg-white' : ''}`}
-                onClick={() => handleCategoryChange(category)}
-              >
-                {category}
-              </button>
-            ))}
+            {/* Category Filters */}
+            <div className="flex flex-wrap justify-center gap-3">
+              {categories.map(category => (
+                <button 
+                  key={category}
+                  onClick={() => handleCategoryChange(category)}
+                  className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                    activeCategory === category 
+                      ? 'bg-southern-brown text-white shadow-md' 
+                      : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Loading State */}
@@ -191,71 +213,85 @@ export default function ProductsPage() {
 
           {/* Error State */}
           {error && (
-            <div className="text-center py-12">
+            <div className="bg-white rounded-lg p-8 text-center max-w-md mx-auto shadow-lg">
               <p className="text-xl text-red-600 mb-4">{error}</p>
               <button 
                 onClick={() => window.location.reload()}
-                className="btn btn-primary"
+                className="btn bg-southern-brown text-white px-8 py-3 rounded-full hover:bg-southern-brown/90 transition-colors"
               >
                 Try Again
               </button>
             </div>
           )}
 
-          {/* No Results Message */}
-          {!isLoading && !error && filteredProducts.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-xl text-southern-brown">No products found matching your search.</p>
-              <button 
-                onClick={() => {setSearchTerm(''); setActiveCategory('All Products');}} 
-                className="mt-4 btn btn-primary"
-              >
-                Clear Filters
-              </button>
-            </div>
-          )}
-
           {/* Products Grid */}
-          {!isLoading && !error && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredProducts.map((product) => (
-                <div key={product._id} className="card overflow-hidden hover:shadow-lg transition-all duration-300">
-                  <div className="relative h-80 w-full overflow-hidden group">
-                    <Image 
-                      src={product.images[0]?.url || '/images/placeholder.jpg'} 
-                      alt={product.images[0]?.alt || product.title} 
-                      width={800}
-                      height={800}
-                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
-                      unoptimized
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredProducts.map((product) => (
+              <div key={product._id} className="group">
+                <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+                  {/* Product Image */}
+                  <div className="relative aspect-square overflow-hidden">
+                    <Image
+                      src={product.images[0]?.url || '/images/placeholder.jpg'}
+                      alt={product.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                    <div className="absolute bottom-0 left-0 bg-southern-brown/80 text-white py-1 px-3 rounded-tr-md">
-                      {product.category}
-                    </div>
+                    {product.isActive === false && (
+                      <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                        <span className="text-white text-lg font-semibold">Coming Soon</span>
+                      </div>
+                    )}
                   </div>
+
+                  {/* Product Info */}
                   <div className="p-6">
-                    <div className="flex justify-between items-start mb-2">
-                      <h2 className="font-heading text-xl text-southern-brown">{product.title}</h2>
-                      <span className="text-southern-accent font-medium">${product.price.toFixed(2)}</span>
+                    <div className="mb-4">
+                      <h3 className="text-xl font-semibold text-southern-brown mb-2">
+                        {product.title}
+                      </h3>
+                      <p className="text-gray-600 line-clamp-2">
+                        {product.description}
+                      </p>
                     </div>
-                    <p className="text-gray-600 mb-4">{product.description}</p>
-                    <div className="flex justify-between items-center">
-                      <Link href={`/products/${product._id}`} className="text-southern-brown hover:text-southern-accent transition-colors font-medium flex items-center">
-                        View Details
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </Link>
-                      <button 
-                        onClick={() => handleAddToCart(product)} 
-                        className="btn btn-primary py-1 px-3"
+                    
+                    <div className="flex items-center justify-between">
+                      <span className="text-xl font-bold text-southern-brown">
+                        ${product.price.toFixed(2)}
+                      </span>
+                      <button
+                        onClick={() => handleAddToCart(product)}
+                        disabled={!product.isActive || addedToCart[product._id as string]}
+                        className={`px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
+                          addedToCart[product._id as string]
+                            ? 'bg-southern-green text-white'
+                            : product.isActive
+                            ? 'bg-southern-brown text-white hover:bg-southern-brown/90'
+                            : 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                        }`}
                       >
-                        {addedToCart[product._id as string] ? '✓ Added' : 'Add to Cart'}
+                        {addedToCart[product._id as string] ? 'Added!' : 'Add to Cart'}
                       </button>
                     </div>
                   </div>
                 </div>
-              ))}
+              </div>
+            ))}
+          </div>
+
+          {/* No Results */}
+          {filteredProducts.length === 0 && !isLoading && !error && (
+            <div className="text-center py-12">
+              <p className="text-xl text-southern-brown mb-4">No products found</p>
+              <button 
+                onClick={() => {
+                  setSearchTerm('');
+                  setActiveCategory('All Products');
+                }}
+                className="btn bg-southern-brown text-white px-8 py-3 rounded-full hover:bg-southern-brown/90 transition-colors"
+              >
+                Clear Filters
+              </button>
             </div>
           )}
         </div>

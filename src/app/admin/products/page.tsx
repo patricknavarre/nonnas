@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 
 interface Product {
   _id: string;
@@ -22,38 +23,15 @@ interface Product {
 
 export default function ProductsAdminPage() {
   const router = useRouter();
+  const { data: session, status } = useSession();
   
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [error, setError] = useState("");
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<{id: string; name: string; email: string; role: string} | null>(null);
 
   useEffect(() => {
-    // Check authentication first
-    const checkAuth = async () => {
-      try {
-        const response = await fetch('/api/auth/status');
-        const data = await response.json();
-        
-        if (!data.authenticated) {
-          console.log('Not authenticated in products page, redirecting to login');
-          router.push('/admin/login?from=/admin/products');
-          return false;
-        }
-        
-        setIsAuthenticated(true);
-        setUser(data.user);
-        return true;
-      } catch (err) {
-        console.error('Error checking auth status:', err);
-        setError('Failed to verify authentication');
-        return false;
-      }
-    };
-
     // Load products after authentication check
     const loadProducts = async () => {
       try {
@@ -77,15 +55,46 @@ export default function ProductsAdminPage() {
       }
     };
 
-    const initializePage = async () => {
-      const authResult = await checkAuth();
-      if (authResult) {
-        await loadProducts();
-      }
-    };
+    if (status === 'authenticated' && session?.user?.role === 'admin') {
+      loadProducts();
+    } else if (status === 'unauthenticated') {
+      router.push('/api/auth/signin');
+    }
+  }, [status, session, router]);
 
-    initializePage();
-  }, [router]);
+  // Show loading state while checking authentication
+  if (status === "loading" || loading) {
+    return (
+      <div className="min-h-screen bg-southern-cream pt-32 flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-southern-beige border-t-southern-brown rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  // Check if the user has admin privileges
+  if (session && session.user && session.user.role !== "admin") {
+    return (
+      <div className="min-h-screen bg-southern-cream p-8">
+        <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
+          <h1 className="text-2xl font-bold text-southern-brown mb-4">Access Denied</h1>
+          <p className="text-gray-700 mb-4">
+            You do not have permission to access the admin dashboard.
+          </p>
+          <Link
+            href="/"
+            className="inline-block px-4 py-2 bg-southern-green text-white rounded hover:bg-southern-green/80"
+          >
+            Return to Home
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // Return null while loading to prevent flash of redirect
+  if (status !== 'authenticated') {
+    return null;
+  }
 
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this product?")) {
@@ -116,18 +125,6 @@ export default function ProductsAdminPage() {
       setDeleteLoading(false);
     }
   };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-southern-cream pt-32 flex items-center justify-center">
-        <div className="w-12 h-12 border-4 border-southern-beige border-t-southern-brown rounded-full animate-spin"></div>
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return null; // Will redirect in useEffect
-  }
 
   return (
     <div className="min-h-screen bg-southern-cream">
