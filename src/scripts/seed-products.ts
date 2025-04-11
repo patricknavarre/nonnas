@@ -2,8 +2,12 @@ import mongoose from 'mongoose';
 import { Product } from '../models/Product';
 import dotenv from 'dotenv';
 
-// Load environment variables
-dotenv.config({ path: '.env.local' });
+// Load environment variables from the appropriate file
+if (process.env.NODE_ENV === 'production') {
+  dotenv.config();
+} else {
+  dotenv.config({ path: '.env.local' });
+}
 
 const MONGODB_URI = process.env.MONGODB_URI as string;
 
@@ -11,8 +15,37 @@ if (!MONGODB_URI) {
   throw new Error('Please define the MONGODB_URI environment variable');
 }
 
+console.log('Environment:', process.env.NODE_ENV || 'development');
+console.log('Using database:', MONGODB_URI.split('@')[1]); // Log the database host without credentials
+
 // Product data
 const products = [
+  {
+    title: "Brothers/Sisters Picture Frames",
+    description: "Beautiful picture frame perfect for showcasing sibling photos.",
+    price: 19.99,
+    images: [
+      {
+        url: "/images/484334791_122115354848744183_8909163640246418595_nonna.jpg",
+        alt: "Brothers/Sisters Picture Frames"
+      }
+    ],
+    category: "Home Decor",
+    isActive: true
+  },
+  {
+    title: "Easter Table Center Piece",
+    description: "Elegant Easter-themed table centerpiece for your holiday celebrations.",
+    price: 29.99,
+    images: [
+      {
+        url: "/images/488914455_122120175896744183_8118277209099763042_nonna.jpg",
+        alt: "Easter Table Center Piece"
+      }
+    ],
+    category: "Home Decor",
+    isActive: true
+  },
   {
     title: "Easter Bunny Gift Basket 1",
     description: "Easter Bunny Gift Basket for Kids.",
