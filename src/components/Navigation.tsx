@@ -164,44 +164,48 @@ export default function Navigation() {
               </svg>
             </button>
             
-            <div className={`transition-all duration-300 ${
-              isCollectionsOpen ? 'block visible' : 'hidden invisible'
-            }`}>
-              <Link
-                href="/products"
-                className="block px-8 py-2 text-gray-600 hover:bg-southern-cream hover:text-southern-brown transition-colors"
-                onClick={handleMobileNavigation}
-              >
-                All Products
-              </Link>
-              <Link
-                href="/products?category=Home Decor"
-                className="block px-8 py-2 text-gray-600 hover:bg-southern-cream hover:text-southern-brown transition-colors"
-                onClick={handleMobileNavigation}
-              >
-                Home Decor
-              </Link>
-              <Link
-                href="/products?category=Baby Goods/Kids Goods"
-                className="block px-8 py-2 text-gray-600 hover:bg-southern-cream hover:text-southern-brown transition-colors"
-                onClick={handleMobileNavigation}
-              >
-                Baby & Kids Goods
-              </Link>
-              <Link
-                href="/products?category=Apparel & Clothing"
-                className="block px-8 py-2 text-gray-600 hover:bg-southern-cream hover:text-southern-brown transition-colors"
-                onClick={handleMobileNavigation}
-              >
-                Apparel & Clothing
-              </Link>
-              <Link
-                href="/products?category=Seasonal"
-                className="block px-8 py-2 text-gray-600 hover:bg-southern-cream hover:text-southern-brown transition-colors"
-                onClick={handleMobileNavigation}
-              >
-                Seasonal
-              </Link>
+            <div 
+              className={`overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out bg-southern-cream/20 ${
+                isCollectionsOpen ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'
+              }`}
+            >
+              <div className="py-1">
+                <Link
+                  href="/products"
+                  className="block px-8 py-2 text-gray-600 hover:bg-southern-cream hover:text-southern-brown transition-colors"
+                  onClick={handleMobileNavigation}
+                >
+                  All Products
+                </Link>
+                <Link
+                  href="/products?category=Home Decor"
+                  className="block px-8 py-2 text-gray-600 hover:bg-southern-cream hover:text-southern-brown transition-colors"
+                  onClick={handleMobileNavigation}
+                >
+                  Home Decor
+                </Link>
+                <Link
+                  href="/products?category=Baby Goods/Kids Goods"
+                  className="block px-8 py-2 text-gray-600 hover:bg-southern-cream hover:text-southern-brown transition-colors"
+                  onClick={handleMobileNavigation}
+                >
+                  Baby & Kids Goods
+                </Link>
+                <Link
+                  href="/products?category=Apparel & Clothing"
+                  className="block px-8 py-2 text-gray-600 hover:bg-southern-cream hover:text-southern-brown transition-colors"
+                  onClick={handleMobileNavigation}
+                >
+                  Apparel & Clothing
+                </Link>
+                <Link
+                  href="/products?category=Seasonal"
+                  className="block px-8 py-2 text-gray-600 hover:bg-southern-cream hover:text-southern-brown transition-colors"
+                  onClick={handleMobileNavigation}
+                >
+                  Seasonal
+                </Link>
+              </div>
             </div>
             
             <Link
