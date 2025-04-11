@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 // Load environment variables
 dotenv.config({ path: '.env.local' });
 
-const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_URI = process.env.MONGODB_URI as string;
 
 if (!MONGODB_URI) {
   throw new Error('Please define the MONGODB_URI environment variable');
@@ -16,14 +16,14 @@ const products = [
   {
     title: "Rustic Frame Collection",
     description: "Beautifully distressed wooden frames in various sizes to display your cherished memories.",
-    price: 34.99, // Average price for the range
+    price: 34.99,
     images: [
       {
         url: "/images/487936279_122120175872744183_2083276447989818708_n1.jpg",
         alt: "Rustic Frame Collection"
       }
     ],
-    category: "Home Décor",
+    category: "Home Decor",
     isActive: true
   },
   {
@@ -36,7 +36,7 @@ const products = [
         alt: "Ceramic Vase Set"
       }
     ],
-    category: "Home Décor",
+    category: "Home Decor",
     isActive: true
   },
   {
@@ -49,20 +49,20 @@ const products = [
         alt: "Farmhouse Table Runner"
       }
     ],
-    category: "Table & Kitchen",
+    category: "Home Decor",
     isActive: true
   },
   {
     title: "Handwoven Basket Collection",
     description: "Versatile storage solutions with Southern charm, perfect for organizing any space in your home.",
-    price: 47.99, // Average price for the range
+    price: 47.99,
     images: [
       {
         url: "/images/488898200_122120175830744183_7304860668947672558_n4.jpg",
         alt: "Handwoven Basket Collection"
       }
     ],
-    category: "Home Décor",
+    category: "Home Decor",
     isActive: true
   },
   {
@@ -75,7 +75,7 @@ const products = [
         alt: "Southern Spice Jar Set"
       }
     ],
-    category: "Table & Kitchen",
+    category: "Home Decor",
     isActive: true
   },
   {
@@ -88,7 +88,7 @@ const products = [
         alt: "Vintage-Inspired Wall Art"
       }
     ],
-    category: "Home Décor",
+    category: "Home Decor",
     isActive: true
   },
   {
@@ -101,7 +101,7 @@ const products = [
         alt: "Weathered Wood Wall Shelf"
       }
     ],
-    category: "Home Décor",
+    category: "Home Decor",
     isActive: true
   },
 ];
