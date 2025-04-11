@@ -12,7 +12,6 @@ export default async function Home() {
   const heroHeading = await getSetting<string>('hero_heading', 'Discover Unique Treasures');
   const heroSubheading = await getSetting<string>('hero_subheading', 'Curated vintage & handcrafted home goods with southern charm');
   const siteTitle = await getSetting<string>('site_title', "Nonna & Rue's");
-  const heroLogo = await getSetting<string>('hero_logo', '/images/NonnaAndRues.jpg');
   
   // Featured category settings
   const featuredCategory1Title = await getSetting<string>('featured_category_1_title', 'Home Decor');
@@ -57,18 +56,6 @@ export default async function Home() {
         
         <div className="relative z-10 container mx-auto px-6 py-8 text-center">
           <div className="max-w-3xl mx-auto">
-            <div className="mb-8">
-              <div className="rounded-full overflow-hidden bg-white/90 border-4 border-white shadow-lg inline-block p-2">
-                <Image 
-                  src={heroLogo} 
-                  alt={siteTitle}
-                  width={160}
-                  height={160}
-                  className="rounded-full"
-                  priority
-                />
-              </div>
-            </div>
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
               {heroHeading}
             </h1>
