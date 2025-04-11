@@ -16,16 +16,16 @@ export default async function Home() {
   
   // Featured category settings
   const featuredCategory1Title = await getSetting<string>('featured_category_1_title', 'Home Decor');
-  const featuredCategory1Image = await getSetting<string>('featured_category_1_image', '/images/categories/home-decor.jpg');
-  const featuredCategory1Link = await getSetting<string>('featured_category_1_link', '/category/home-decor');
+  const featuredCategory1Image = await getSetting<string>('featured_category_1_image', '/images/488914455_122120175896744183_8118277209099763042_nonna.jpg');
+  const featuredCategory1Link = await getSetting<string>('featured_category_1_link', '/products?category=Home Decor');
   
   const featuredCategory2Title = await getSetting<string>('featured_category_2_title', 'Vintage');
   const featuredCategory2Image = await getSetting<string>('featured_category_2_image', '/images/categories/vintage.jpg');
-  const featuredCategory2Link = await getSetting<string>('featured_category_2_link', '/category/vintage');
+  const featuredCategory2Link = await getSetting<string>('featured_category_2_link', '/products?category=Vintage');
   
   const featuredCategory3Title = await getSetting<string>('featured_category_3_title', 'Seasonal');
-  const featuredCategory3Image = await getSetting<string>('featured_category_3_image', '/images/categories/seasonal.jpg');
-  const featuredCategory3Link = await getSetting<string>('featured_category_3_link', '/category/seasonal');
+  const featuredCategory3Image = await getSetting<string>('featured_category_3_image', '/images/487812383_122120175842744183_7049025500246276914_n3.jpg');
+  const featuredCategory3Link = await getSetting<string>('featured_category_3_link', '/products?category=Seasonal');
   
   // Featured products section settings
   const featuredProductsHeading = await getSetting<string>('featured_products_heading', 'Our Featured Products');
