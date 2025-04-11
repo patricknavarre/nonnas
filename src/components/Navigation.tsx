@@ -13,10 +13,19 @@ export default function Navigation() {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
+      
+      // Don't close if clicking the Shop Collections button or its children
+      if (target.closest('button') && target.closest('button')?.textContent?.includes('Shop Collections')) {
+        return;
+      }
+      
+      // Only close mobile menu when clicking outside both the menu and button
       if (!target.closest('.mobile-menu') && !target.closest('.mobile-menu-button')) {
         setIsMobileMenuOpen(false);
       }
-      if (!target.closest('.collections-menu') && !target.closest('.collections-button')) {
+      
+      // Only close collections menu in desktop mode
+      if (window.innerWidth >= 768 && !target.closest('.collections-menu') && !target.closest('.collections-button')) {
         setIsCollectionsOpen(false);
       }
     };
@@ -144,13 +153,16 @@ export default function Navigation() {
 
         {/* Mobile Menu */}
         <div 
-          className={`md:hidden mobile-menu transition-all duration-300 ease-in-out ${
-            isMobileMenuOpen ? 'h-auto opacity-100 mt-4' : 'h-0 opacity-0'
+          className={`md:hidden mobile-menu ${
+            isMobileMenuOpen ? 'block' : 'hidden'
           }`}
         >
-          <div className="py-2 space-y-1 bg-white rounded-lg shadow-lg">
+          <div className="py-2 space-y-1 bg-white rounded-lg shadow-lg mt-4">
             <button
-              onClick={() => setIsCollectionsOpen(!isCollectionsOpen)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsCollectionsOpen(!isCollectionsOpen);
+              }}
               className="w-full text-left px-4 py-2 text-gray-600 hover:bg-southern-cream hover:text-southern-brown transition-colors flex items-center justify-between"
             >
               Shop Collections
@@ -166,11 +178,11 @@ export default function Navigation() {
             
             {/* Mobile Collections Dropdown */}
             <div 
-              className={`transition-all duration-300 ease-in-out ${
-                isCollectionsOpen ? 'block' : 'hidden'
+              className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                isCollectionsOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
               }`}
             >
-              <div className="py-1 bg-southern-cream/20">
+              <div className="bg-southern-cream/20">
                 <Link
                   href="/products"
                   className="block px-8 py-2 text-gray-600 hover:bg-southern-cream hover:text-southern-brown transition-colors"
@@ -208,7 +220,7 @@ export default function Navigation() {
                 </Link>
               </div>
             </div>
-            
+
             <Link
               href="/about"
               className="block px-4 py-2 text-gray-600 hover:bg-southern-cream hover:text-southern-brown transition-colors"
