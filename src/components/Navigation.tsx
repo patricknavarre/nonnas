@@ -144,8 +144,8 @@ export default function Navigation() {
 
         {/* Mobile Menu */}
         <div 
-          className={`md:hidden mobile-menu transition-all duration-300 ease-in-out overflow-hidden ${
-            isMobileMenuOpen ? 'max-h-[500px] opacity-100 mt-4' : 'max-h-0 opacity-0'
+          className={`md:hidden mobile-menu transition-all duration-300 ease-in-out ${
+            isMobileMenuOpen ? 'h-auto opacity-100 mt-4' : 'h-0 opacity-0'
           }`}
         >
           <div className="py-2 space-y-1 bg-white rounded-lg shadow-lg">
@@ -164,12 +164,13 @@ export default function Navigation() {
               </svg>
             </button>
             
+            {/* Mobile Collections Dropdown */}
             <div 
-              className={`overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out bg-southern-cream/20 ${
-                isCollectionsOpen ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'
+              className={`transition-all duration-300 ease-in-out ${
+                isCollectionsOpen ? 'block' : 'hidden'
               }`}
             >
-              <div className="py-1">
+              <div className="py-1 bg-southern-cream/20">
                 <Link
                   href="/products"
                   className="block px-8 py-2 text-gray-600 hover:bg-southern-cream hover:text-southern-brown transition-colors"
