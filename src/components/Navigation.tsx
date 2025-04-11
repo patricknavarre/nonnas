@@ -164,8 +164,8 @@ export default function Navigation() {
               </svg>
             </button>
             
-            <div className={`transition-all duration-300 space-y-1 ${
-              isCollectionsOpen ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
+            <div className={`transition-all duration-300 ${
+              isCollectionsOpen ? 'block visible' : 'hidden invisible'
             }`}>
               <Link
                 href="/products"
