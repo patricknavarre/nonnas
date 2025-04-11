@@ -14,96 +14,83 @@ if (!MONGODB_URI) {
 // Product data
 const products = [
   {
-    title: "Rustic Frame Collection",
-    description: "Beautifully distressed wooden frames in various sizes to display your cherished memories.",
-    price: 34.99,
-    images: [
-      {
-        url: "/images/487936279_122120175872744183_2083276447989818708_n1.jpg",
-        alt: "Rustic Frame Collection"
-      }
-    ],
-    category: "Home Decor",
-    isActive: true
-  },
-  {
-    title: "Ceramic Vase Set",
-    description: "Elegant set of handcrafted ceramic vases with a subtle cream glaze, perfect for fresh or dried flowers.",
-    price: 38.99,
-    images: [
-      {
-        url: "/images/488710333_122120175884744183_7905290102645973840_n2.jpg",
-        alt: "Ceramic Vase Set"
-      }
-    ],
-    category: "Home Decor",
-    isActive: true
-  },
-  {
-    title: "Farmhouse Table Runner",
-    description: "Elevate your table setting with our premium cotton table runner, featuring classic Southern designs.",
-    price: 29.99,
+    title: "Easter Bunny Gift Basket 1",
+    description: "Easter Bunny Gift Basket for Kids.",
+    price: 19.99,
     images: [
       {
         url: "/images/487812383_122120175842744183_7049025500246276914_n3.jpg",
-        alt: "Farmhouse Table Runner"
+        alt: "Easter Bunny Gift Basket 1"
       }
     ],
-    category: "Home Decor",
+    category: "Seasonal",
     isActive: true
   },
   {
-    title: "Handwoven Basket Collection",
-    description: "Versatile storage solutions with Southern charm, perfect for organizing any space in your home.",
-    price: 47.99,
+    title: "Fubble Gift",
+    description: "Fubble Toy - Gift for Kids",
+    price: 14.99,
     images: [
       {
-        url: "/images/488898200_122120175830744183_7304860668947672558_n4.jpg",
-        alt: "Handwoven Basket Collection"
+        url: "/images/487936279_122120175872744183_2083276447989818708_n1.jpg",
+        alt: "Fubble Gift Toy"
       }
     ],
-    category: "Home Decor",
+    category: "Baby Goods/Kids Goods",
     isActive: true
   },
   {
-    title: "Southern Spice Jar Set",
-    description: "Keep your kitchen organized with these charming spice jars featuring hand-lettered labels.",
-    price: 42.99,
-    images: [
-      {
-        url: "/images/488492807_122120175818744183_427004679278758560_n5.jpg",
-        alt: "Southern Spice Jar Set"
-      }
-    ],
-    category: "Home Decor",
-    isActive: true
-  },
-  {
-    title: "Vintage-Inspired Wall Art",
-    description: "Add character to your walls with our collection of vintage-inspired prints celebrating Southern living.",
-    price: 32.99,
+    title: "Easter Bunny Gift Basket 2",
+    description: "A fun gift basket for kids!",
+    price: 29.99,
     images: [
       {
         url: "/images/487960451_122120175806744183_7234243251571161358_n6.jpg",
-        alt: "Vintage-Inspired Wall Art"
+        alt: "Easter Bunny Gift Basket 2"
       }
     ],
-    category: "Home Decor",
+    category: "Seasonal",
     isActive: true
   },
   {
-    title: "Weathered Wood Wall Shelf",
-    description: "Functional and stylish, this distressed wood shelf adds rustic charm while providing display space.",
-    price: 56.99,
+    title: "Easter Bunny Gift Basket 3",
+    description: "Delightful Easter basket featuring a plush bunny.",
+    price: 24.99,
     images: [
       {
-        url: "/images/488608399_122120175722744183_514367544990633102_n7.jpg",
-        alt: "Weathered Wood Wall Shelf"
+        url: "/images/488710333_122120175884744183_7905290102645973840_n2.jpg",
+        alt: "Easter Bunny Gift Basket 3"
       }
     ],
-    category: "Home Decor",
+    category: "Seasonal",
     isActive: true
   },
+  {
+    title: "Easter Bunny Gift Basket with Gold Ribbon",
+    description: "Premium Easter basket with gold ribbon and special treats.",
+    price: 34.99,
+    images: [
+      {
+        url: "/images/488898200_122120175830744183_7304860668947672558_n4.jpg",
+        alt: "Easter Bunny Gift Basket with Gold Ribbon"
+      }
+    ],
+    category: "Seasonal",
+    isActive: true
+  },
+  {
+    title: "Easter Bunny Gift Basket Collection",
+    description: "Our signature Easter basket with white and gold accents.",
+    price: 39.99,
+    images: [
+      {
+        url: "/images/488492807_122120175818744183_427004679278758560_n5.jpg",
+        alt: "Easter Bunny Gift Basket Collection"
+      }
+    ],
+    category: "Seasonal",
+    isActive: true
+  }
 ];
 
 async function seedProducts() {

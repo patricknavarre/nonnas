@@ -44,7 +44,7 @@ export default async function Home() {
       <RefreshHandler lastUpdate={timestamp} />
       
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center pt-32">
+      <section className="relative min-h-[70vh] flex items-center justify-center pt-24">
         <div className="absolute inset-0 bg-southern-brown/70">
           <Image
             src="/images/Nonna_and_Rues_BG.jpg"
@@ -55,36 +55,36 @@ export default async function Home() {
           />
         </div>
         
-        <div className="relative z-10 container mx-auto px-6 py-12 text-center">
+        <div className="relative z-10 container mx-auto px-6 py-8 text-center">
           <div className="max-w-3xl mx-auto">
-            <div className="mb-12">
+            <div className="mb-8">
               <div className="rounded-full overflow-hidden bg-white/90 border-4 border-white shadow-lg inline-block p-2">
                 <Image 
                   src={heroLogo} 
                   alt={siteTitle}
-                  width={200}
-                  height={200}
+                  width={160}
+                  height={160}
                   className="rounded-full"
                   priority
                 />
               </div>
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
               {heroHeading}
             </h1>
-            <p className="text-xl md:text-2xl text-white mb-12 font-light">
+            <p className="text-xl md:text-2xl text-white mb-8 font-light">
               {heroSubheading}
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-6">
               <Link
                 href="/products"
-                className="btn text-lg py-4 px-10 bg-white text-southern-brown hover:bg-southern-cream transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl rounded-full font-semibold"
+                className="btn text-lg py-3 px-8 bg-white text-southern-brown hover:bg-southern-cream transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl rounded-full font-semibold"
               >
                 Shop Now
               </Link>
               <Link
                 href="/about"
-                className="btn text-lg py-4 px-10 border-2 border-white text-white hover:bg-white hover:text-southern-brown transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl rounded-full font-semibold"
+                className="btn text-lg py-3 px-8 border-2 border-white text-white hover:bg-white hover:text-southern-brown transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl rounded-full font-semibold"
               >
                 Our Story
               </Link>
@@ -94,7 +94,7 @@ export default async function Home() {
       </section>
 
       {/* Featured Categories */}
-      <section className="py-20 bg-white">
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-6">
           <h2 className="text-3xl font-bold text-center text-southern-brown mb-12">
             Shop by Category
