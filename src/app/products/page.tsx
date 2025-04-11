@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useCart } from '@/components/CartContext';
 import { useState, useEffect } from 'react';
 import type { IProduct } from '@/models/Product';
+import { useSearchParams } from 'next/navigation';
 
 // Convert IProduct to match the cart item format
 const formatForCart = (product: IProduct) => {
@@ -14,12 +15,13 @@ const formatForCart = (product: IProduct) => {
     price: `$${product.price.toFixed(2)}`,
     imageSrc: product.images[0]?.url || '',
     quantity: 1,
-    category: product.category
+    category: product.category || 'Seasonal' // Default to Seasonal if no category
   };
 };
 
 export default function ProductsPage() {
   const { addToCart } = useCart();
+  const searchParams = useSearchParams();
   const [addedToCart, setAddedToCart] = useState<{[key: string]: boolean}>({});
   const [searchTerm, setSearchTerm] = useState('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -28,6 +30,16 @@ export default function ProductsPage() {
   const [activeCategory, setActiveCategory] = useState('All Products');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+
+  // Get category from URL on component mount and when URL changes
+  useEffect(() => {
+    const categoryParam = searchParams.get('category');
+    if (categoryParam) {
+      setActiveCategory(categoryParam);
+    } else {
+      setActiveCategory('All Products');
+    }
+  }, [searchParams]);
 
   // Fetch products on component mount
   useEffect(() => {
@@ -41,8 +53,13 @@ export default function ProductsPage() {
         }
         
         const data = await response.json();
-        setProducts(data);
-        setFilteredProducts(data);
+        // Set all current products to "Seasonal" category if not already set
+        const updatedData = data.map((product: IProduct) => ({
+          ...product,
+          category: product.category || 'Seasonal'
+        }));
+        setProducts(updatedData);
+        setFilteredProducts(updatedData);
       } catch (err) {
         console.error('Error fetching products:', err);
         setError('Unable to load products. Please try again later.');
@@ -73,10 +90,11 @@ export default function ProductsPage() {
     }
 
     const allWords = products.flatMap(product => {
+      const category = product.category || 'Seasonal';
       return [
         ...product.title.split(' '),
         ...product.description.split(' '),
-        product.category
+        category
       ];
     });
 
@@ -99,24 +117,43 @@ export default function ProductsPage() {
       filtered = filtered.filter(product => 
         product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         product.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.category.toLowerCase().includes(searchTerm.toLowerCase())
+        (product.category || 'Seasonal').toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
     
     // Filter by category
     if (activeCategory !== 'All Products') {
-      filtered = filtered.filter(product => product.category === activeCategory);
+      filtered = filtered.filter(product => {
+        const productCategory = product.category || 'Seasonal';
+        console.log('Product category:', productCategory, 'Active category:', activeCategory);
+        return productCategory === activeCategory;
+      });
     }
     
+    console.log('Filtered products:', filtered.length);
     setFilteredProducts(filtered);
   }, [searchTerm, activeCategory, products]);
 
   const handleCategoryChange = (category: string) => {
     setActiveCategory(category);
+    // Update URL without page reload
+    const url = new URL(window.location.href);
+    if (category === 'All Products') {
+      url.searchParams.delete('category');
+    } else {
+      url.searchParams.set('category', category);
+    }
+    window.history.pushState({}, '', url);
   };
 
-  // Get unique categories from products
-  const categories = ['All Products', ...new Set(products.map(product => product.category))];
+  // Define available categories
+  const categories = [
+    'All Products',
+    'Home Decor',
+    'Baby Goods/Kids Goods',
+    'Apparel & Clothing',
+    'Seasonal'
+  ];
 
   return (
     <div className="min-h-screen bg-southern-cream">
@@ -133,7 +170,7 @@ export default function ProductsPage() {
         </div>
         <div className="relative z-10 container mx-auto px-6 text-center">
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-8">
-            Our Collection
+            {activeCategory === 'All Products' ? 'Our Collection' : activeCategory}
           </h1>
           <p className="text-xl md:text-2xl text-white/90 max-w-2xl mx-auto font-light">
             Discover our carefully curated selection of Southern-inspired home décor and lifestyle pieces
