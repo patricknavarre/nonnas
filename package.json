@@ -10,7 +10,9 @@
     "seed": "tsx src/scripts/seed-products.ts",
     "seed:prod": "NODE_ENV=production tsx src/scripts/seed-products.ts",
     "update-categories": "tsx src/scripts/update-category-names.ts",
-    "update-categories:prod": "NODE_ENV=production tsx src/scripts/update-category-names.ts"
+    "update-categories:prod": "NODE_ENV=production tsx src/scripts/update-category-names.ts",
+    "update-images": "tsx src/scripts/update-image-settings.ts",
+    "update-images:prod": "NODE_ENV=production tsx src/scripts/update-image-settings.ts"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
