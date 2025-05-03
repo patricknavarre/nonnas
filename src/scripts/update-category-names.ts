@@ -1,16 +1,42 @@
 import mongoose from 'mongoose';
-import connectDB from '@/lib/mongodb';
 import { Product } from '@/models/Product';
 import { Setting } from '@/models/Setting';
 
 // This script normalizes category names across the database
 // to ensure consistency between the development and production environments
 
+async function connectDB(uri: string) {
+  try {
+    if (!uri) {
+      throw new Error('MongoDB URI is required');
+    }
+    
+    await mongoose.connect(uri);
+    console.log('Connected to MongoDB');
+    return true;
+  } catch (error) {
+    console.error('MongoDB connection error:', error);
+    return false;
+  }
+}
+
 async function run() {
+  // Use environment variable or command line argument
+  const uri = process.env.MONGODB_URI || process.argv[2];
+  
+  if (!uri) {
+    console.error('Error: MONGODB_URI environment variable or command-line argument is required');
+    console.error('Usage: npm run update-categories -- "mongodb+srv://your-connection-string"');
+    console.error('Or: MONGODB_URI="mongodb+srv://your-connection-string" npm run update-categories');
+    process.exit(1);
+  }
+
   try {
     console.log('Connecting to MongoDB...');
-    await connectDB();
-    console.log('Connected to MongoDB');
+    const connected = await connectDB(uri);
+    if (!connected) {
+      process.exit(1);
+    }
 
     // 1. Update product categories for consistency
     console.log('Updating product categories...');
