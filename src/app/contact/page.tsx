@@ -93,7 +93,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-southern-brown mb-1">Our Categories</h3>
-                      <p className="text-gray-600">Home Décor</p>
+                      <p className="text-gray-600">Home Decor</p>
                       <p className="text-gray-600">Baby/Kids</p>
                       <p className="text-gray-600">Teen/Adults</p>
                       <p className="text-gray-600">Seasonal</p>

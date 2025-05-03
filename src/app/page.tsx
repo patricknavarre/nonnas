@@ -80,6 +80,22 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* From Dream to Reality Section */}
+      <section className="py-16 bg-southern-cream">
+        <div className="container mx-auto px-6">
+          <div className="max-w-4xl mx-auto bg-white p-8 sm:p-12 rounded-lg shadow-lg">
+            <h2 className="text-3xl font-bold text-southern-brown mb-6 text-center">
+              From Dream to Reality
+            </h2>
+            <div className="prose prose-lg text-gray-700 max-w-none text-center">
+              <p className="mb-6">
+                Nonna and Rue's Unique Finds began as a God-inspired dream to create a family-inspired gift destination offering curated boutique of treasures for home décor, babies and kids, teens and adults, seasonal delights, kitchen essentials, and stationary. Founded by Rhonda Navarre and Lauren Giles, our boutique reflects our love for God and family in every detail. In just a few months since opening, we have been blessed with incredible success, becoming a cherished destination for unique, heartfelt finds. Thank you for joining our dream turned reality!
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Featured Categories */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-6">
@@ -88,9 +104,12 @@ export default async function Home() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { title: featuredCategory1Title, image: featuredCategory1Image, link: featuredCategory1Link },
-              { title: featuredCategory2Title, image: featuredCategory2Image, link: featuredCategory2Link },
-              { title: featuredCategory3Title, image: featuredCategory3Image, link: featuredCategory3Link },
+              { title: "Home Decor", image: "/images/categories/home-decor.jpg", link: "/products?category=Home Decor" },
+              { title: "Baby/Kids", image: "/images/categories/baby-kids.jpg", link: "/products?category=Baby/Kids" },
+              { title: "Teen/Adults", image: "/images/categories/teen-adults.jpg", link: "/products?category=Teen/Adults" },
+              { title: "Seasonal", image: "/images/categories/seasonal.jpg", link: "/products?category=Seasonal" },
+              { title: "Kitchen", image: "/images/categories/kitchen.jpg", link: "/products?category=Kitchen" },
+              { title: "Stationary", image: "/images/categories/stationary.jpg", link: "/products?category=Stationary" },
             ].map((category, index) => (
               <Link
                 key={index}
@@ -102,6 +121,7 @@ export default async function Home() {
                   alt={category.title}
                   fill
                   className="object-cover transition-transform duration-300 group-hover:scale-110"
+                  unoptimized
                 />
                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                   <h3 className="text-2xl font-bold text-white">

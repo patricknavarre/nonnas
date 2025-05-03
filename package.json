@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "seed": "tsx src/scripts/seed-products.ts",
-    "seed:prod": "NODE_ENV=production tsx src/scripts/seed-products.ts"
+    "seed:prod": "NODE_ENV=production tsx src/scripts/seed-products.ts",
+    "update-categories": "tsx src/scripts/update-category-names.ts",
+    "update-categories:prod": "NODE_ENV=production tsx src/scripts/update-category-names.ts"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",

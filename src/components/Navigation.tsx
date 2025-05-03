@@ -96,22 +96,34 @@ export default function Navigation() {
                     Home Decor
                   </Link>
                   <Link 
-                    href="/products?category=Baby Goods/Kids Goods" 
+                    href="/products?category=Baby/Kids" 
                     className="block px-4 py-2 text-gray-600 hover:bg-southern-cream hover:text-southern-brown transition-colors"
                   >
-                    Baby & Kids Goods
+                    Baby/Kids
                   </Link>
                   <Link 
-                    href="/products?category=Apparel & Clothing" 
+                    href="/products?category=Teen/Adults" 
                     className="block px-4 py-2 text-gray-600 hover:bg-southern-cream hover:text-southern-brown transition-colors"
                   >
-                    Apparel & Clothing
+                    Teen/Adults
                   </Link>
                   <Link 
                     href="/products?category=Seasonal" 
                     className="block px-4 py-2 text-gray-600 hover:bg-southern-cream hover:text-southern-brown transition-colors"
                   >
                     Seasonal
+                  </Link>
+                  <Link 
+                    href="/products?category=Kitchen" 
+                    className="block px-4 py-2 text-gray-600 hover:bg-southern-cream hover:text-southern-brown transition-colors"
+                  >
+                    Kitchen
+                  </Link>
+                  <Link 
+                    href="/products?category=Stationary" 
+                    className="block px-4 py-2 text-gray-600 hover:bg-southern-cream hover:text-southern-brown transition-colors"
+                  >
+                    Stationary
                   </Link>
                 </div>
               )}
@@ -198,18 +210,18 @@ export default function Navigation() {
                   Home Decor
                 </Link>
                 <Link
-                  href="/products?category=Baby Goods/Kids Goods"
+                  href="/products?category=Baby/Kids"
                   className="block px-8 py-2 text-gray-600 hover:bg-southern-cream hover:text-southern-brown transition-colors"
                   onClick={handleMobileNavigation}
                 >
-                  Baby & Kids Goods
+                  Baby/Kids
                 </Link>
                 <Link
-                  href="/products?category=Apparel & Clothing"
+                  href="/products?category=Teen/Adults"
                   className="block px-8 py-2 text-gray-600 hover:bg-southern-cream hover:text-southern-brown transition-colors"
                   onClick={handleMobileNavigation}
                 >
-                  Apparel & Clothing
+                  Teen/Adults
                 </Link>
                 <Link
                   href="/products?category=Seasonal"
@@ -217,6 +229,20 @@ export default function Navigation() {
                   onClick={handleMobileNavigation}
                 >
                   Seasonal
+                </Link>
+                <Link
+                  href="/products?category=Kitchen"
+                  className="block px-8 py-2 text-gray-600 hover:bg-southern-cream hover:text-southern-brown transition-colors"
+                  onClick={handleMobileNavigation}
+                >
+                  Kitchen
+                </Link>
+                <Link
+                  href="/products?category=Stationary"
+                  className="block px-8 py-2 text-gray-600 hover:bg-southern-cream hover:text-southern-brown transition-colors"
+                  onClick={handleMobileNavigation}
+                >
+                  Stationary
                 </Link>
               </div>
             </div>
