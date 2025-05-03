@@ -212,13 +212,11 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
             >
               <option value="">Select a category</option>
               <option value="Home Décor">Home Décor</option>
-              <option value="Furniture">Furniture</option>
-              <option value="Lighting">Lighting</option>
-              <option value="Table & Kitchen">Table & Kitchen</option>
-              <option value="Garden & Porch">Garden & Porch</option>
-              <option value="Gifts">Gifts</option>
-              <option value="Art">Art</option>
-              <option value="Textiles">Textiles</option>
+              <option value="Baby/Kids">Baby/Kids</option>
+              <option value="Teen/Adults">Teen/Adults</option>
+              <option value="Seasonal">Seasonal</option>
+              <option value="Kitchen">Kitchen</option>
+              <option value="Stationary">Stationary</option>
             </select>
           </div>
 

@@ -45,8 +45,10 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-southern-brown mb-1">Location</h3>
+                      <p className="text-gray-600">The Grove of Shreveport</p>
                       <p className="text-gray-600">107 N Spring Street</p>
-                      <p className="text-gray-600">The Grove of Shreveport, LA</p>
+                      <p className="text-gray-600">Shreveport, LA 71101</p>
+                      <p className="text-gray-600 mt-2 italic">Enjoy free parking reserved exclusively for The Grove customers!</p>
                     </div>
                   </div>
 
@@ -59,9 +61,11 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-southern-brown mb-1">Store Hours</h3>
+                      <p className="text-gray-600 font-medium">First & Third Weekends of Each Month</p>
                       <p className="text-gray-600">Friday: 4pm - 7pm</p>
                       <p className="text-gray-600">Saturday: 10am - 6pm</p>
                       <p className="text-gray-600">Sunday: 12pm - 4pm</p>
+                      <p className="text-gray-600 mt-2 italic">Special Events/Holiday Shopping posted on Website & Facebook</p>
                     </div>
                   </div>
 
@@ -89,9 +93,12 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-southern-brown mb-1">Our Categories</h3>
-                      <p className="text-gray-600">Home Decor</p>
-                      <p className="text-gray-600">Baby Goods/Kids Goods</p>
-                      <p className="text-gray-600">Apparel & Clothing</p>
+                      <p className="text-gray-600">Home Décor</p>
+                      <p className="text-gray-600">Baby/Kids</p>
+                      <p className="text-gray-600">Teen/Adults</p>
+                      <p className="text-gray-600">Seasonal</p>
+                      <p className="text-gray-600">Kitchen</p>
+                      <p className="text-gray-600">Stationary</p>
                     </div>
                   </div>
                 </div>

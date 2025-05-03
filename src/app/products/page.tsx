@@ -53,7 +53,7 @@ export default function ProductsPage() {
         }
         
         const data = await response.json();
-        // Set all current products to "Seasonal" category if not already set
+        // Set default category if not set
         const updatedData = data.map((product: IProduct) => ({
           ...product,
           category: product.category || 'Seasonal'
@@ -150,9 +150,11 @@ export default function ProductsPage() {
   const categories = [
     'All Products',
     'Home Decor',
-    'Baby Goods/Kids Goods',
-    'Apparel & Clothing',
-    'Seasonal'
+    'Baby/Kids',
+    'Teen/Adults',
+    'Seasonal',
+    'Kitchen',
+    'Stationary'
   ];
 
   return (
@@ -182,20 +184,20 @@ export default function ProductsPage() {
       <main className="py-16">
         <div className="container mx-auto px-6">
           {/* Search and Filter Section */}
-          <div className="bg-white rounded-xl shadow-lg p-8 mb-12 -mt-16 relative z-20 max-w-4xl mx-auto">
+          <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 mb-12 -mt-16 relative z-20 max-w-4xl mx-auto">
             {/* Search Box */}
-            <div className="relative mb-8">
+            <div className="relative mb-6">
               <input
                 type="text"
                 placeholder="Search products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-6 py-4 bg-gray-50 border-2 border-southern-brown/30 rounded-full focus:outline-none focus:ring-2 focus:ring-southern-accent text-lg"
+                className="w-full px-6 py-3 bg-gray-50 border-2 border-southern-brown/20 rounded-full focus:outline-none focus:ring-2 focus:ring-southern-accent focus:border-transparent transition-all text-lg"
               />
               {searchTerm && (
                 <button 
                   onClick={() => setSearchTerm('')}
-                  className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -206,55 +208,67 @@ export default function ProductsPage() {
             
             {/* Search Suggestions */}
             {suggestions.length > 0 && (
-              <div className="absolute z-30 w-full max-w-4xl left-1/2 -translate-x-1/2 bg-white mt-1 border border-gray-200 rounded-xl shadow-xl">
+              <div className="absolute z-30 w-full max-w-4xl left-1/2 -translate-x-1/2 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
                 {suggestions.map((suggestion, index) => (
                   <div 
                     key={index}
-                    className="px-6 py-3 hover:bg-gray-50 cursor-pointer transition-colors"
+                    className="px-6 py-3 hover:bg-gray-50 cursor-pointer transition-colors border-b border-gray-100 last:border-b-0"
                     onClick={() => {
                       setSearchTerm(suggestion);
                       setSuggestions([]);
                     }}
                   >
-                    {suggestion}
+                    <div className="flex items-center">
+                      <svg className="w-4 h-4 text-southern-brown/60 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                      </svg>
+                      <span>{suggestion}</span>
+                    </div>
                   </div>
                 ))}
               </div>
             )}
 
             {/* Category Filters */}
-            <div className="flex flex-wrap justify-center gap-3">
-              {categories.map(category => (
-                <button 
-                  key={category}
-                  onClick={() => handleCategoryChange(category)}
-                  className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                    activeCategory === category 
-                      ? 'bg-southern-brown text-white shadow-md' 
-                      : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
+            <div className="overflow-x-auto py-2">
+              <div className="flex justify-center gap-3 min-w-max">
+                {categories.map(category => (
+                  <button 
+                    key={category}
+                    onClick={() => handleCategoryChange(category)}
+                    className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 whitespace-nowrap ${
+                      activeCategory === category 
+                        ? 'bg-southern-brown text-white shadow-md' 
+                        : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                    }`}
+                  >
+                    {category}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
           {/* Loading State */}
           {isLoading && (
-            <div className="text-center py-12">
+            <div className="text-center py-12 bg-white rounded-lg shadow-md max-w-md mx-auto mt-8">
               <div className="w-16 h-16 border-4 border-southern-beige border-t-southern-brown rounded-full animate-spin mx-auto mb-4"></div>
               <p className="text-xl text-southern-brown">Loading products...</p>
+              <p className="text-gray-600 mt-2">Please wait while we prepare our collection for you.</p>
             </div>
           )}
 
           {/* Error State */}
           {error && (
-            <div className="bg-white rounded-lg p-8 text-center max-w-md mx-auto shadow-lg">
-              <p className="text-xl text-red-600 mb-4">{error}</p>
+            <div className="bg-white rounded-lg p-8 text-center max-w-md mx-auto shadow-md mt-8">
+              <svg className="w-12 h-12 mx-auto text-red-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <p className="text-xl text-red-600 mb-3">{error}</p>
+              <p className="text-gray-600 mb-4">There was a problem loading the products. Please try again.</p>
               <button 
                 onClick={() => window.location.reload()}
-                className="btn bg-southern-brown text-white px-8 py-3 rounded-full hover:bg-southern-brown/90 transition-colors"
+                className="bg-southern-brown text-white px-6 py-2 rounded-full hover:bg-southern-brown/90 transition-colors"
               >
                 Try Again
               </button>
@@ -262,10 +276,10 @@ export default function ProductsPage() {
           )}
 
           {/* Products Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {filteredProducts.map((product) => (
               <div key={product._id} className="group">
-                <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+                <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
                   {/* Product Image */}
                   <div className="relative aspect-square overflow-hidden">
                     <Image
@@ -282,24 +296,24 @@ export default function ProductsPage() {
                   </div>
 
                   {/* Product Info */}
-                  <div className="p-6">
-                    <div className="mb-4">
-                      <h3 className="text-xl font-semibold text-southern-brown mb-2">
+                  <div className="p-5">
+                    <div className="mb-3">
+                      <h3 className="text-lg font-semibold text-southern-brown mb-1.5 line-clamp-1">
                         {product.title}
                       </h3>
-                      <p className="text-gray-600 line-clamp-2">
+                      <p className="text-gray-600 line-clamp-2 text-sm">
                         {product.description}
                       </p>
                     </div>
                     
-                    <div className="flex items-center justify-between">
-                      <span className="text-xl font-bold text-southern-brown">
+                    <div className="flex items-center justify-between mt-auto">
+                      <span className="text-lg font-bold text-southern-brown">
                         ${product.price.toFixed(2)}
                       </span>
                       <button
                         onClick={() => handleAddToCart(product)}
                         disabled={!product.isActive || addedToCart[product._id as string]}
-                        className={`px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
+                        className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-300 ${
                           addedToCart[product._id as string]
                             ? 'bg-southern-green text-white'
                             : product.isActive
@@ -318,14 +332,18 @@ export default function ProductsPage() {
 
           {/* No Results */}
           {filteredProducts.length === 0 && !isLoading && !error && (
-            <div className="text-center py-12">
-              <p className="text-xl text-southern-brown mb-4">No products found</p>
+            <div className="text-center py-8 bg-white rounded-lg shadow-md max-w-lg mx-auto mt-8">
+              <svg className="w-12 h-12 mx-auto text-southern-brown/50 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <p className="text-xl text-southern-brown mb-3">No products found</p>
+              <p className="text-gray-600 mb-4 px-6">We couldn't find any products matching your current filters.</p>
               <button 
                 onClick={() => {
                   setSearchTerm('');
                   setActiveCategory('All Products');
                 }}
-                className="btn bg-southern-brown text-white px-8 py-3 rounded-full hover:bg-southern-brown/90 transition-colors"
+                className="btn bg-southern-brown text-white px-6 py-2 rounded-full hover:bg-southern-brown/90 transition-colors"
               >
                 Clear Filters
               </button>
